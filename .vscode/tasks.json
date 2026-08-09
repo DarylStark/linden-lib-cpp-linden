@@ -1,0 +1,43 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "Install Conan dependencies (Debug)",
+            "command": "conan",
+            "args": [
+                "install",
+                ".",
+                "-of",
+                ".conan/Debug",
+                "-s",
+                "build_type=Debug",
+                "--build=missing"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "group": "none",
+            "problemMatcher": []
+        },
+        {
+            "type": "shell",
+            "label": "Install Conan dependencies (Release)",
+            "command": "conan",
+            "args": [
+                "install",
+                ".",
+                "-of",
+                ".conan/Release",
+                "-s",
+                "build_type=Release",
+                "--build=missing"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "group": "none",
+            "problemMatcher": []
+        }
+    ]
+}
