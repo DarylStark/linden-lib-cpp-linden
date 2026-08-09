@@ -1,5 +1,7 @@
 #include "game.hpp"
+#include "transition.hpp"
 #include <SFML/Graphics.hpp>
+#include <cmath>
 #include <iostream>
 #include <memory>
 #include <string>
@@ -63,7 +65,87 @@ int main()
     sf::Text textResult(fontScore, "", 30);
     textResult.setPosition({562 + 128 + 10, 50});
 
+    // Set up for transitioning
+    float radius = 50;
+    float y = 10;
+    uint64_t duration = 3'500'000;
+
+    // Linear
+    sf::CircleShape circleTransLinear(radius);
+    circleTransLinear.setFillColor(sf::Color({128, 0, 0}));
+    circleTransLinear.setPosition({1, y});
+    graphics::Transition transitionTransLinear(
+        std::make_unique<graphics::Linear>(),
+        [&circleTransLinear, radius, y](float n)
+        {
+            n = std::clamp(n, 0.0f, 1.0f);
+            float x = std::lerp(0, 900 - (radius * 2), n);
+            circleTransLinear.setPosition({x, y});
+        },
+        duration);
+
+    // EaseInOutQuad
+    y += 110;
+    sf::CircleShape circleTransEaseInOut(radius);
+    circleTransEaseInOut.setFillColor(sf::Color({0, 128, 0}));
+    circleTransEaseInOut.setPosition({1, y});
+    graphics::Transition transitionTransEaseInOut(
+        std::make_unique<graphics::EaseInOutQuad>(),
+        [&circleTransEaseInOut, radius, y](float n)
+        {
+            n = std::clamp(n, 0.0f, 1.0f);
+            float x = std::lerp(0, 900 - (radius * 2), n);
+            circleTransEaseInOut.setPosition({x, y});
+        },
+        duration);
+
+    // Smoothstep
+    y += 110;
+    sf::CircleShape circleTransSmoothStep(radius);
+    circleTransSmoothStep.setFillColor(sf::Color({0, 0, 255}));
+    circleTransSmoothStep.setPosition({1, y});
+    graphics::Transition transitionTransSmoothStep(
+        std::make_unique<graphics::EaseInOutSmoothStep>(),
+        [&circleTransSmoothStep, radius, y](float n)
+        {
+            n = std::clamp(n, 0.0f, 1.0f);
+            float x = std::lerp(0, 900 - (radius * 2), n);
+            circleTransSmoothStep.setPosition({x, y});
+        },
+        duration);
+
+    // Smootherstep
+    y += 110;
+    sf::CircleShape circleTransSmootherStep(radius);
+    circleTransSmootherStep.setFillColor(sf::Color({128, 128, 0}));
+    circleTransSmootherStep.setPosition({1, y});
+    graphics::Transition transitionTransSmootherStep(
+        std::make_unique<graphics::EaseInOutSmootherStep>(),
+        [&circleTransSmootherStep, radius, y](float n)
+        {
+            n = std::clamp(n, 0.0f, 1.0f);
+            float x = std::lerp(0, 900 - (radius * 2), n);
+            circleTransSmootherStep.setPosition({x, y});
+        },
+        duration);
+
+    // Sine
+    y += 110;
+    sf::CircleShape circleTransSine(radius);
+    circleTransSine.setFillColor(sf::Color({0, 128, 255}));
+    circleTransSine.setPosition({1, y});
+    graphics::Transition transitionTransSine(
+        std::make_unique<graphics::EaseInOutSine>(),
+        [&circleTransSine, radius, y](float n)
+        {
+            n = std::clamp(n, 0.0f, 1.0f);
+            float x = std::lerp(0, 900 - (radius * 2), n);
+            circleTransSine.setPosition({x, y});
+        },
+        duration);
+
     sf::Clock clock;
+    sf::Clock transitionClock;
 
     while (window.isOpen())
     {
@@ -167,6 +249,24 @@ int main()
         }
 
         window.draw(textResult);
+
+        // Transition practicing
+        auto elapsedTime = transitionClock.getElapsedTime().asMicroseconds();
+
+        transitionTransLinear.tick(elapsedTime);
+        window.draw(circleTransLinear);
+
+        transitionTransEaseInOut.tick(elapsedTime);
+        window.draw(circleTransEaseInOut);
+
+        transitionTransSmoothStep.tick(elapsedTime);
+        window.draw(circleTransSmoothStep);
+
+        transitionTransSmootherStep.tick(elapsedTime);
+        window.draw(circleTransSmootherStep);
+
+        transitionTransSine.tick(elapsedTime);
+        window.draw(circleTransSine);
 
         // End the current frame
         window.display();
