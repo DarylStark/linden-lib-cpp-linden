@@ -8,6 +8,25 @@ namespace math
 {
     namespace easing
     {
+        namespace helpers
+        {
+            template <typename InFunc>
+            constexpr float makeEaseOut(InFunc &&inFunc, float t) noexcept
+            {
+                return 1.0f - inFunc(1.0f - t);
+            }
+
+            template <typename InFunc>
+            constexpr float makeEaseInOut(InFunc &&inFunc, float t) noexcept
+            {
+                if (t < 0.5f)
+                {
+                    return inFunc(t * 2.0f) / 2.0f;
+                }
+                return (1.0f + makeEaseOut(inFunc, t * 2.0f - 1.0f)) / 2.0f;
+            }
+        } // namespace helpers
+
         // Generic
         constexpr float linear(float normalizedTime) noexcept
         {
@@ -15,124 +34,211 @@ namespace math
         }
 
         // Power easing In and Out
-        constexpr float inOutQuad(float normalizedTime) noexcept
+        constexpr float inQuad(float t) noexcept
         {
-            if (normalizedTime < 0.5f)
-            {
-                float f = normalizedTime;
-                return 2.0f * f * f;
-            }
-            float f = -2.0f * normalizedTime + 2.0f;
-            return 1.0f - (f * f) / 2.0f;
+            return t * t;
         }
 
-        constexpr float inOutCubic(float normalizedTime) noexcept
+        constexpr float outQuad(float t) noexcept
         {
-            if (normalizedTime < 0.5f)
-            {
-                float f = normalizedTime;
-                return 4.0f * f * f * f;
-            }
-            float f = -2.0f * normalizedTime + 2.0f;
-            return 1.0f - (f * f * f) / 2.0f;
+            return helpers::makeEaseOut(inQuad, t);
         }
 
-        constexpr float inOutQuart(float normalizedTime) noexcept
+        constexpr float inOutQuad(float t) noexcept
         {
-            if (normalizedTime < 0.5f)
-            {
-                float f = normalizedTime;
-                return 8.0f * f * f * f * f;
-            }
-            float f = -2.0f * normalizedTime + 2.0f;
-            return 1.0f - (f * f * f * f) / 2.0f;
+            return helpers::makeEaseInOut(inQuad, t);
         }
 
-        constexpr float inOutQuint(float normalizedTime) noexcept
+        constexpr float inCubic(float t) noexcept
         {
-            if (normalizedTime < 0.5f)
-            {
-                float f = normalizedTime;
-                return 16.0f * f * f * f * f * f;
-            }
-            float f = -2.0f * normalizedTime + 2.0f;
-            return 1.0f - (f * f * f * f * f) / 2.0f;
+            return t * t * t;
         }
 
-        constexpr float inOutSextic(float normalizedTime) noexcept
+        constexpr float outCubic(float t) noexcept
         {
-            if (normalizedTime < 0.5f)
-            {
-                float f = normalizedTime;
-                return 32.0f * f * f * f * f * f * f;
-            }
-            float f = -2.0f * normalizedTime + 2.0f;
-            return 1.0f - (f * f * f * f * f * f) / 2.0f;
+            return helpers::makeEaseOut(inCubic, t);
         }
 
-        constexpr float inOutSeptic(float normalizedTime) noexcept
+        constexpr float inOutCubic(float t) noexcept
         {
-            if (normalizedTime < 0.5f)
-            {
-                float f = normalizedTime;
-                return 64.0f * f * f * f * f * f * f * f;
-            }
-            float f = -2.0f * normalizedTime + 2.0f;
-            return 1.0f - (f * f * f * f * f * f * f) / 2.0f;
+            return helpers::makeEaseInOut(inCubic, t);
         }
 
-        constexpr float inOutOctic(float normalizedTime) noexcept
+        constexpr float inQuart(float t) noexcept
         {
-            if (normalizedTime < 0.5f)
-            {
-                float f = normalizedTime;
-                return 128.0f * f * f * f * f * f * f * f * f;
-            }
-            float f = -2.0f * normalizedTime + 2.0f;
-            return 1.0f - (f * f * f * f * f * f * f * f) / 2.0f;
+            return t * t * t * t;
         }
 
-        constexpr float inOutNonic(float normalizedTime) noexcept
+        constexpr float outQuart(float t) noexcept
         {
-            if (normalizedTime < 0.5f)
-            {
-                float f = normalizedTime;
-                return 256.0f * f * f * f * f * f * f * f * f * f;
-            }
-            float f = -2.0f * normalizedTime + 2.0f;
-            return 1.0f - (f * f * f * f * f * f * f * f * f) / 2.0f;
+            return helpers::makeEaseOut(inQuart, t);
         }
 
-        constexpr float inOutDecic(float normalizedTime) noexcept
+        constexpr float inOutQuart(float t) noexcept
         {
-            if (normalizedTime < 0.5f)
-            {
-                float f = normalizedTime;
-                return 512.0f * f * f * f * f * f * f * f * f * f * f;
-            }
-            float f = -2.0f * normalizedTime + 2.0f;
-            return 1.0f - (f * f * f * f * f * f * f * f * f * f) / 2.0f;
+            return helpers::makeEaseInOut(inQuart, t);
         }
 
-        // Smoothstep
-        constexpr float inOutSmoothStep(float normalizedTime) noexcept
+        constexpr float inQuint(float t) noexcept
+        {
+            return t * t * t * t * t;
+        }
+
+        constexpr float outQuint(float t) noexcept
+        {
+            return helpers::makeEaseOut(inQuint, t);
+        }
+
+        constexpr float inOutQuint(float t) noexcept
+        {
+            return helpers::makeEaseInOut(inQuint, t);
+        }
+
+        constexpr float inSextic(float t) noexcept
+        {
+            return t * t * t * t * t * t;
+        }
+
+        constexpr float outSextic(float t) noexcept
+        {
+            return helpers::makeEaseOut(inSextic, t);
+        }
+
+        constexpr float inOutSextic(float t) noexcept
+        {
+            return helpers::makeEaseInOut(inSextic, t);
+        }
+
+        constexpr float inSeptic(float t) noexcept
+        {
+            return t * t * t * t * t * t * t;
+        }
+
+        constexpr float outSeptic(float t) noexcept
+        {
+            return helpers::makeEaseOut(inSeptic, t);
+        }
+
+        constexpr float inOutSeptic(float t) noexcept
+        {
+            return helpers::makeEaseInOut(inSeptic, t);
+        }
+
+        constexpr float inOctic(float t) noexcept
+        {
+            return t * t * t * t * t * t * t * t;
+        }
+
+        constexpr float outOctic(float t) noexcept
+        {
+            return helpers::makeEaseOut(inOctic, t);
+        }
+
+        constexpr float inOutOctic(float t) noexcept
+        {
+            return helpers::makeEaseInOut(inOctic, t);
+        }
+
+        constexpr float inNonic(float t) noexcept
+        {
+            return t * t * t * t * t * t * t * t * t;
+        }
+
+        constexpr float outNonic(float t) noexcept
+        {
+            return helpers::makeEaseOut(inNonic, t);
+        }
+
+        constexpr float inOutNonic(float t) noexcept
+        {
+            return helpers::makeEaseInOut(inNonic, t);
+        }
+
+        constexpr float inDecic(float t) noexcept
+        {
+            return t * t * t * t * t * t * t * t * t * t;
+        }
+
+        constexpr float outDecic(float t) noexcept
+        {
+            return helpers::makeEaseOut(inDecic, t);
+        }
+
+        constexpr float inOutDecic(float t) noexcept
+        {
+            return helpers::makeEaseInOut(inDecic, t);
+        }
+
+        class inPoly
+        {
+        private:
+            float _degree;
+
+        public:
+            constexpr explicit inPoly(float degree) noexcept : _degree(degree)
+            {
+            }
+
+            constexpr float operator()(float normalizedTime) const noexcept
+            {
+                return std::pow(normalizedTime, _degree);
+            }
+        };
+
+        class outPoly
+        {
+        private:
+            inPoly _in;
+
+        public:
+            constexpr explicit outPoly(float degree) noexcept : _in(degree) {}
+            constexpr float operator()(float normalizedTime) const noexcept
+            {
+                return helpers::makeEaseOut(_in, normalizedTime);
+            }
+        };
+
+        class inOutPoly
+        {
+        private:
+            inPoly _in;
+
+        public:
+            constexpr explicit inOutPoly(float degree) noexcept : _in(degree) {}
+            constexpr float operator()(float normalizedTime) const noexcept
+            {
+                return helpers::makeEaseInOut(_in, normalizedTime);
+            }
+        };
+
+        // Smoothstep (no in and out, they are always S shape)
+        constexpr float smoothStep(float normalizedTime) noexcept
         {
             return normalizedTime * normalizedTime *
                    (3.f - 2.f * normalizedTime);
         }
 
-        constexpr float inOutSmootherStep(float normalizedTime) noexcept
+        constexpr float smootherStep(float normalizedTime) noexcept
         {
             return normalizedTime * normalizedTime * normalizedTime *
                    (normalizedTime * (normalizedTime * 6 - 15) + 10);
         }
 
         // Trigonometric
+        constexpr float inSine(float normalizedTime) noexcept
+        {
+            return 1.0f - std::cos(normalizedTime *
+                                   (std::numbers::pi_v<float> * 0.5f));
+        }
+
+        constexpr float outSine(float normalizedTime) noexcept
+        {
+            return helpers::makeEaseOut(inSine, normalizedTime);
+        }
+
         constexpr float inOutSine(float normalizedTime) noexcept
         {
-            return (1.f -
-                    std::cos(std::numbers::pi_v<float> * normalizedTime)) /
-                   2.f;
+            return helpers::makeEaseInOut(inSine, normalizedTime);
         }
 
         // Exponental
@@ -150,56 +256,73 @@ namespace math
         }
 
         // Circular
+        constexpr float inCirc(float normalizedTime) noexcept
+        {
+            return 1.0f - std::sqrtf(1.0f - normalizedTime * normalizedTime);
+        }
+
+        constexpr float outCirc(float normalizedTime) noexcept
+        {
+            return helpers::makeEaseOut(inCirc, normalizedTime);
+        }
+
         constexpr float inOutCirc(float normalizedTime) noexcept
         {
-            if (normalizedTime < 0.5f)
-            {
-                float f = 2.0f * normalizedTime;
-                return (1.0f - std::sqrtf(1.0f - f * f)) / 2.0f;
-            }
-            else
-            {
-                float f = -2.0f * normalizedTime + 2.0f;
-                return (std::sqrtf(1.0f - f * f) + 1.0f) / 2.0f;
-            }
+            return helpers::makeEaseInOut(inCirc, normalizedTime);
         }
 
         // Back
+        constexpr float inBack(float normalizedTime) noexcept
+        {
+            constexpr float c1 = 1.70158f;
+            constexpr float c3 = c1 + 1.0f;
+
+            return c3 * normalizedTime * normalizedTime * normalizedTime -
+                   c1 * normalizedTime * normalizedTime;
+        }
+
+        constexpr float outBack(float normalizedTime) noexcept
+        {
+            return helpers::makeEaseOut(inBack, normalizedTime);
+        }
+
         constexpr float inOutBack(float normalizedTime) noexcept
         {
-            float c1 = 2.592389f;
-            float c2 = c1 + 1.0f;
-
-            if (normalizedTime < 0.5f)
-            {
-                float f = 2.0f * normalizedTime;
-                return (f * f * (c2 * f - c1)) / 2.0f;
-            }
-
-            float f = 2.0f * normalizedTime - 2.0f;
-            return (f * f * (c2 * f + c1) + 2.0f) / 2.0f;
+            return helpers::makeEaseInOut(inBack, normalizedTime);
         }
 
         // Physical
-        constexpr float inOutElastic(float normalizedTime) noexcept
+        constexpr float inElastic(float normalizedTime) noexcept
         {
-            float c5 = (2.0f * std::numbers::pi_v<float>) / 4.5f;
+            if (normalizedTime == 0.0f)
+                return 0.0f;
+            if (normalizedTime == 1.0f)
+                return 1.0f;
 
-            if (normalizedTime < 0.5f)
-            {
-                float exp = std::pow(2.0f, 20.0f * normalizedTime - 10.0f);
-                float sin = std::sin((20.0f * normalizedTime - 11.125f) * c5);
-                return -(exp * sin) / 2.0f;
-            }
-            float exp = std::pow(2.0f, -20.0f * normalizedTime + 10.0f);
-            float sin = std::sin((20.0f * normalizedTime - 11.125f) * c5);
-            return (exp * sin) / 2.0f + 1.0f;
+            // Periodieke constante voor de elasticiteitsgolf: c4 = (2 * PI) / 3
+            constexpr float c4 = (2.0f * std::numbers::pi_v<float>) / 3.0f;
+
+            // Exponentiële groei gecombineerd met de sinusgolf
+            float exp = std::pow(2.0f, 10.0f * normalizedTime - 10.0f);
+            float sin = std::sin((10.0f * normalizedTime - 10.75f) * c4);
+
+            return -(exp * sin);
         }
 
-        constexpr float _easeOutBounce(float normalizedTime) noexcept
+        constexpr float outElastic(float normalizedTime) noexcept
         {
-            float n1 = 7.5625f;
-            float d1 = 2.75f;
+            return helpers::makeEaseOut(inElastic, normalizedTime);
+        }
+
+        constexpr float inOutElastic(float normalizedTime) noexcept
+        {
+            return helpers::makeEaseInOut(inElastic, normalizedTime);
+        }
+
+        constexpr float outBounce(float normalizedTime) noexcept
+        {
+            constexpr float n1 = 7.5625f;
+            constexpr float d1 = 2.75f;
 
             if (normalizedTime < 1.0f / d1)
             {
@@ -207,55 +330,29 @@ namespace math
             }
             else if (normalizedTime < 2.0f / d1)
             {
-                normalizedTime -= 1.5f / d1;
-                return n1 * normalizedTime * normalizedTime + 0.75f;
+                float t = normalizedTime - (1.5f / d1);
+                return n1 * t * t + 0.75f;
             }
             else if (normalizedTime < 2.625f / d1)
             {
-                normalizedTime -= 2.25f / d1;
-                return n1 * normalizedTime * normalizedTime + 0.9375f;
+                float t = normalizedTime - (2.25f / d1);
+                return n1 * t * t + 0.9375f;
             }
             else
             {
-                normalizedTime -= 2.625f / d1;
-                return n1 * normalizedTime * normalizedTime + 0.984375f;
+                float t = normalizedTime - (2.625f / d1);
+                return n1 * t * t + 0.984375f;
             }
+        }
+
+        constexpr float inBounce(float normalizedTime) noexcept
+        {
+            return 1.0f - outBounce(1.0f - normalizedTime);
         }
 
         constexpr float inOutBounce(float normalizedTime) noexcept
         {
-            if (normalizedTime < 0.5f)
-            {
-                return (1.0f - _easeOutBounce(1.0f - 2.0f * normalizedTime)) /
-                       2.0f;
-            }
-            else
-            {
-                return (1.0f + _easeOutBounce(2.0f * normalizedTime - 1.0f)) /
-                       2.0f;
-            }
+            return helpers::makeEaseInOut(inBounce, normalizedTime);
         }
-
-        class inOutPoly
-        {
-        private:
-            float _degree;
-
-        public:
-            inOutPoly(float degree) noexcept : _degree(degree) {};
-            constexpr float operator()(float normalizedTime) noexcept
-            {
-                if (normalizedTime < 0.5f)
-                {
-                    return std::exp2f(_degree - 1.0f) *
-                           std::pow(normalizedTime, _degree);
-                }
-                else
-                {
-                    float f = -2.0f * normalizedTime + 2.0f;
-                    return 1.0f - (std::pow(f, _degree) / 2.0f);
-                }
-            }
-        };
     } // namespace easing
 } // namespace math
