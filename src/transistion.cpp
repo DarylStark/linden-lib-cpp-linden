@@ -2,8 +2,9 @@
 
 namespace graphics
 {
-    Transition::Transition(std::unique_ptr<TweeningStrategy> &&strategy,
-                           TransitionCallback callback, uint64_t durationUs)
+    Transition::Transition(
+        std::unique_ptr<math::easing::EasingStrategy> &&strategy,
+        uint64_t durationUs, TransitionCallback callback) noexcept
         : _tweeningStrategy(std::move(strategy)), _callback(callback),
           _durationUs(durationUs)
     {
@@ -29,11 +30,9 @@ namespace graphics
 
         normalized = std::clamp(normalized, 0.0f, 1.0f);
 
-        _callback(_tweeningStrategy->apply(normalized));
-
-        if (normalized == 1.0)
+        if (_callback)
         {
-            reset();
+            _callback(_tweeningStrategy->apply(normalized));
         }
     }
 

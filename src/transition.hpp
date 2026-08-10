@@ -1,6 +1,6 @@
 #pragma once
 
-#include "tweening_strategy.hpp"
+#include "easing.hpp"
 #include <cstdint>
 #include <functional>
 #include <memory>
@@ -15,12 +15,12 @@ namespace graphics
         uint64_t _durationUs;
         uint64_t _startTime{};
 
-        TweeningStrategy::UniquePtr _tweeningStrategy;
+        math::easing::EasingStrategy::UniquePtr _tweeningStrategy;
         TransitionCallback _callback;
 
     public:
-        Transition(TweeningStrategy::UniquePtr &&strategy,
-                   TransitionCallback callback, uint64_t durationUs);
+        Transition(math::easing::EasingStrategy::UniquePtr &&strategy,
+                   uint64_t durationUs, TransitionCallback callback) noexcept;
 
         void tick(uint64_t dt);
 
