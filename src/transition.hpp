@@ -7,6 +7,7 @@
 
 namespace graphics
 {
+    using EasingFunction = std::function<float(float)>;
     using TransitionCallback = std::function<void(float)>;
 
     class Transition
@@ -15,12 +16,12 @@ namespace graphics
         uint64_t _durationUs;
         uint64_t _startTime{};
 
-        math::easing::EasingStrategy::UniquePtr _tweeningStrategy;
+        EasingFunction _easingFn;
         TransitionCallback _callback;
 
     public:
-        Transition(math::easing::EasingStrategy::UniquePtr &&strategy,
-                   uint64_t durationUs, TransitionCallback callback) noexcept;
+        Transition(EasingFunction easingFn, uint64_t durationUs,
+                   TransitionCallback callback) noexcept;
 
         void tick(uint64_t dt);
 

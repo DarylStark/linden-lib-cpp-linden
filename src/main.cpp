@@ -68,7 +68,7 @@ int main()
     textResult.setPosition({562 + 128 + 10, 50});
 
     // Set up for transitioning
-    float radius = 50;
+    float radius = 25;
     float y = 10;
     uint64_t duration = 2'500'000;
 
@@ -77,124 +77,46 @@ int main()
     circleTransLinear.setFillColor(sf::Color({128, 0, 0}));
     circleTransLinear.setPosition({1, y});
     graphics::Transition transitionTransLinear(
-        std::make_unique<math::easing::Linear>(), duration,
+        math::easing::linear, duration,
         [&circleTransLinear, radius, y](float n)
         {
             float x = std::lerp(0, 900 - (radius * 2), n);
             circleTransLinear.setPosition({x, y});
         });
 
-    // EaseInOutQuad
-    y += 110;
+    // Quad
+    y += 60;
     sf::CircleShape circleTransEaseInOut(radius);
     circleTransEaseInOut.setFillColor(sf::Color({0, 128, 0}));
     circleTransEaseInOut.setPosition({1, y});
     graphics::Transition transitionTransEaseInOut(
-        std::make_unique<math::easing::InOutQuad>(), duration,
+        math::easing::inOutQuad, duration,
         [&circleTransEaseInOut, radius, y](float n)
         {
             float x = std::lerp(0, 900 - (radius * 2), n);
             circleTransEaseInOut.setPosition({x, y});
         });
 
-    // Smoothstep
-    y += 110;
-    sf::CircleShape circleTransSmoothStep(radius);
-    circleTransSmoothStep.setFillColor(sf::Color({0, 0, 255}));
-    circleTransSmoothStep.setPosition({1, y});
-    graphics::Transition transitionTransSmoothStep(
-        std::make_unique<math::easing::InOutSmoothStep>(), duration,
-        [&circleTransSmoothStep, radius, y](float n)
-        {
-            float x = std::lerp(0, 900 - (radius * 2), n);
-            circleTransSmoothStep.setPosition({x, y});
-        });
-
-    // Smootherstep
-    y += 110;
-    sf::CircleShape circleTransSmootherStep(radius);
-    circleTransSmootherStep.setFillColor(sf::Color({128, 128, 0}));
-    circleTransSmootherStep.setPosition({1, y});
-    graphics::Transition transitionTransSmootherStep(
-        std::make_unique<math::easing::InOutSmootherStep>(), duration,
-        [&circleTransSmootherStep, radius, y](float n)
-        {
-            float x = std::lerp(0, 900 - (radius * 2), n);
-            circleTransSmootherStep.setPosition({x, y});
-        });
-
-    // Sine
-    y += 110;
-    sf::CircleShape circleTransSine(radius);
-    circleTransSine.setFillColor(sf::Color({0, 128, 255}));
-    circleTransSine.setPosition({1, y});
-    graphics::Transition transitionTransSine(
-        std::make_unique<math::easing::InOutSine>(), duration,
-        [&circleTransSine, radius, y](float n)
-        {
-            float x = std::lerp(0, 900 - (radius * 2), n);
-            circleTransSine.setPosition({x, y});
-        });
-
-    // Back
-    y += 110;
-    sf::CircleShape circleTransBack(radius);
-    circleTransBack.setFillColor(sf::Color({128, 0, 255}));
-    circleTransBack.setPosition({1, y});
-    graphics::Transition transitionTransBack(
-        std::make_unique<math::easing::InOutBack>(), duration,
-        [&circleTransBack, radius, y](float n)
-        {
-            float x = std::lerp(0, 900 - (radius * 2), n);
-            circleTransBack.setPosition({x, y});
-        });
-
     // Cubic
-    y += 110;
+    y += 60;
     sf::CircleShape circleTransCubic(radius);
     circleTransCubic.setFillColor(sf::Color({128, 128, 255}));
     circleTransCubic.setPosition({1, y});
     graphics::Transition transitionTransCubic(
-        std::make_unique<math::easing::InOutCubic>(), duration,
+        math::easing::inOutCubic, duration,
         [&circleTransCubic, radius, y](float n)
         {
             float x = std::lerp(0, 900 - (radius * 2), n);
             circleTransCubic.setPosition({x, y});
         });
 
-    // Elastic
-    y += 110;
-    sf::CircleShape circleTransElastic(radius);
-    circleTransElastic.setFillColor(sf::Color({128, 128, 0}));
-    circleTransElastic.setPosition({1, y});
-    graphics::Transition transitionTransElastic(
-        std::make_unique<math::easing::InOutElastic>(), duration,
-        [&circleTransElastic, radius, y](float n)
-        {
-            float x = std::lerp(0, 900 - (radius * 2), n);
-            circleTransElastic.setPosition({x, y});
-        });
-
-    // Bounce
-    y += 110;
-    sf::CircleShape circleTransBounce(radius);
-    circleTransBounce.setFillColor(sf::Color({128, 0, 0}));
-    circleTransBounce.setPosition({1, y});
-    graphics::Transition transitionTransBounce(
-        std::make_unique<math::easing::InOutBounce>(), duration,
-        [&circleTransBounce, radius, y](float n)
-        {
-            float x = std::lerp(0, 900 - (radius * 2), n);
-            circleTransBounce.setPosition({x, y});
-        });
-
     // Quart
-    y += 110;
+    y += 60;
     sf::CircleShape circleTransQuart(radius);
     circleTransQuart.setFillColor(sf::Color({128, 0, 0}));
     circleTransQuart.setPosition({1, y});
     graphics::Transition transitionTransQuart(
-        std::make_unique<math::easing::InOutQuart>(), duration,
+        math::easing::inOutQuart, duration,
         [&circleTransQuart, radius, y](float n)
         {
             float x = std::lerp(0, 900 - (radius * 2), n);
@@ -202,25 +124,168 @@ int main()
         });
 
     // Quint
-    y += 110;
+    y += 60;
     sf::CircleShape circleTransQuint(radius);
     circleTransQuint.setFillColor(sf::Color({128, 0, 0}));
     circleTransQuint.setPosition({1, y});
     graphics::Transition transitionTransQuint(
-        std::make_unique<math::easing::InOutQuint>(), duration,
+        math::easing::inOutQuint, duration,
         [&circleTransQuint, radius, y](float n)
         {
             float x = std::lerp(0, 900 - (radius * 2), n);
             circleTransQuint.setPosition({x, y});
         });
 
+    // Sextic
+    y += 60;
+    sf::CircleShape circleTransSextic(radius);
+    circleTransSextic.setFillColor(sf::Color({128, 0, 0}));
+    circleTransSextic.setPosition({1, y});
+    graphics::Transition transitionTransSextic(
+        math::easing::inOutSextic, duration,
+        [&circleTransSextic, radius, y](float n)
+        {
+            float x = std::lerp(0, 900 - (radius * 2), n);
+            circleTransSextic.setPosition({x, y});
+        });
+
+    // Septic
+    y += 60;
+    sf::CircleShape circleTransSeptic(radius);
+    circleTransSeptic.setFillColor(sf::Color({128, 0, 0}));
+    circleTransSeptic.setPosition({1, y});
+    graphics::Transition transitionTransSeptic(
+        math::easing::inOutSextic, duration,
+        [&circleTransSeptic, radius, y](float n)
+        {
+            float x = std::lerp(0, 900 - (radius * 2), n);
+            circleTransSeptic.setPosition({x, y});
+        });
+
+    // Octic
+    y += 60;
+    sf::CircleShape circleTransOctic(radius);
+    circleTransOctic.setFillColor(sf::Color({128, 0, 0}));
+    circleTransOctic.setPosition({1, y});
+    graphics::Transition transitionTransOctic(
+        math::easing::inOutOctic, duration,
+        [&circleTransOctic, radius, y](float n)
+        {
+            float x = std::lerp(0, 900 - (radius * 2), n);
+            circleTransOctic.setPosition({x, y});
+        });
+
+    // Nonic
+    y += 60;
+    sf::CircleShape circleTransNonic(radius);
+    circleTransNonic.setFillColor(sf::Color({128, 0, 0}));
+    circleTransNonic.setPosition({1, y});
+    graphics::Transition transitionTransNonic(
+        math::easing::inOutNonic, duration,
+        [&circleTransNonic, radius, y](float n)
+        {
+            float x = std::lerp(0, 900 - (radius * 2), n);
+            circleTransNonic.setPosition({x, y});
+        });
+
+    // Decic
+    y += 60;
+    sf::CircleShape circleTransDecic(radius);
+    circleTransDecic.setFillColor(sf::Color({128, 0, 0}));
+    circleTransDecic.setPosition({1, y});
+    graphics::Transition transitionTransDecic(
+        math::easing::inOutDecic, duration,
+        [&circleTransDecic, radius, y](float n)
+        {
+            float x = std::lerp(0, 900 - (radius * 2), n);
+            circleTransDecic.setPosition({x, y});
+        });
+
+    // Poly
+    y += 60;
+    sf::CircleShape circleTransPoly(radius);
+    circleTransPoly.setFillColor(sf::Color({128, 0, 0}));
+    circleTransPoly.setPosition({1, y});
+    graphics::Transition transitionTransPoly(
+        math::easing::inOutPoly(10), duration,
+        [&circleTransPoly, radius, y](float n)
+        {
+            float x = std::lerp(0, 900 - (radius * 2), n);
+            circleTransPoly.setPosition({x, y});
+        });
+
+    // Smoothstep
+    y += 60;
+    sf::CircleShape circleTransSmoothStep(radius);
+    circleTransSmoothStep.setFillColor(sf::Color({0, 0, 255}));
+    circleTransSmoothStep.setPosition({1, y});
+    graphics::Transition transitionTransSmoothStep(
+        math::easing::inOutSmoothStep, duration,
+        [&circleTransSmoothStep, radius, y](float n)
+        {
+            float x = std::lerp(0, 900 - (radius * 2), n);
+            circleTransSmoothStep.setPosition({x, y});
+        });
+
+    // Smootherstep
+    y += 60;
+    sf::CircleShape circleTransSmootherStep(radius);
+    circleTransSmootherStep.setFillColor(sf::Color({128, 128, 0}));
+    circleTransSmootherStep.setPosition({1, y});
+    graphics::Transition transitionTransSmootherStep(
+        math::easing::inOutSmootherStep, duration,
+        [&circleTransSmootherStep, radius, y](float n)
+        {
+            float x = std::lerp(0, 900 - (radius * 2), n);
+            circleTransSmootherStep.setPosition({x, y});
+        });
+
+    // Elastic
+    y += 60;
+    sf::CircleShape circleTransElastic(radius);
+    circleTransElastic.setFillColor(sf::Color({128, 128, 0}));
+    circleTransElastic.setPosition({1, y});
+    graphics::Transition transitionTransElastic(
+        math::easing::inOutElastic, duration,
+        [&circleTransElastic, radius, y](float n)
+        {
+            float x = std::lerp(0, 900 - (radius * 2), n);
+            circleTransElastic.setPosition({x, y});
+        });
+
+    // Bounce
+    y += 60;
+    sf::CircleShape circleTransBounce(radius);
+    circleTransBounce.setFillColor(sf::Color({128, 0, 0}));
+    circleTransBounce.setPosition({1, y});
+    graphics::Transition transitionTransBounce(
+        math::easing::inOutBounce, duration,
+        [&circleTransBounce, radius, y](float n)
+        {
+            float x = std::lerp(0, 900 - (radius * 2), n);
+            circleTransBounce.setPosition({x, y});
+        });
+
+    // Sine
+    y += 60;
+    sf::CircleShape circleTransSine(radius);
+    circleTransSine.setFillColor(sf::Color({0, 128, 255}));
+    circleTransSine.setPosition({1, y});
+    graphics::Transition transitionTransSine(
+        math::easing::inOutSine, duration,
+        [&circleTransSine, radius, y](float n)
+        {
+            float x = std::lerp(0, 900 - (radius * 2), n);
+            circleTransSine.setPosition({x, y});
+        });
+
     // Expo
-    y += 110;
+    y += 60;
     sf::CircleShape circleTransExpo(radius);
     circleTransExpo.setFillColor(sf::Color({128, 0, 0}));
     circleTransExpo.setPosition({1, y});
     graphics::Transition transitionTransExpo(
-        std::make_unique<math::easing::InOutExpo>(), duration,
+        math::easing::inOutExpo, duration,
         [&circleTransExpo, radius, y](float n)
         {
             float x = std::lerp(0, 900 - (radius * 2), n);
@@ -228,42 +293,29 @@ int main()
         });
 
     // Circ
-    y += 110;
+    y += 60;
     sf::CircleShape circleTransCirc(radius);
     circleTransCirc.setFillColor(sf::Color({128, 0, 0}));
     circleTransCirc.setPosition({1, y});
     graphics::Transition transitionTransCirc(
-        std::make_unique<math::easing::InOutCirc>(), duration,
+        math::easing::inOutCirc, duration,
         [&circleTransCirc, radius, y](float n)
         {
             float x = std::lerp(0, 900 - (radius * 2), n);
             circleTransCirc.setPosition({x, y});
         });
 
-    // Sextic
-    y += 110;
-    sf::CircleShape circleTransSextic(radius);
-    circleTransSextic.setFillColor(sf::Color({128, 0, 0}));
-    circleTransSextic.setPosition({1, y});
-    graphics::Transition transitionTransSextic(
-        std::make_unique<math::easing::InOutSextic>(), duration,
-        [&circleTransSextic, radius, y](float n)
+    // Back
+    y += 60;
+    sf::CircleShape circleTransBack(radius);
+    circleTransBack.setFillColor(sf::Color({128, 0, 255}));
+    circleTransBack.setPosition({1, y});
+    graphics::Transition transitionTransBack(
+        math::easing::inOutBack, duration,
+        [&circleTransBack, radius, y](float n)
         {
             float x = std::lerp(0, 900 - (radius * 2), n);
-            circleTransSextic.setPosition({x, y});
-        });
-
-    // Poly
-    y += 110;
-    sf::CircleShape circleTransPoly(radius);
-    circleTransPoly.setFillColor(sf::Color({128, 0, 0}));
-    circleTransPoly.setPosition({1, y});
-    graphics::Transition transitionTransPoly(
-        std::make_unique<math::easing::InOutPoly>(32.0f), duration,
-        [&circleTransPoly, radius, y](float n)
-        {
-            float x = std::lerp(0, 900 - (radius * 2), n);
-            circleTransPoly.setPosition({x, y});
+            circleTransBack.setPosition({x, y});
         });
 
     sf::Clock clock;
@@ -381,26 +433,8 @@ int main()
         transitionTransEaseInOut.tick(elapsedTime);
         window.draw(circleTransEaseInOut);
 
-        transitionTransSmoothStep.tick(elapsedTime);
-        window.draw(circleTransSmoothStep);
-
-        transitionTransSmootherStep.tick(elapsedTime);
-        window.draw(circleTransSmootherStep);
-
-        transitionTransSine.tick(elapsedTime);
-        window.draw(circleTransSine);
-
-        transitionTransBack.tick(elapsedTime);
-        window.draw(circleTransBack);
-
         transitionTransCubic.tick(elapsedTime);
         window.draw(circleTransCubic);
-
-        transitionTransElastic.tick(elapsedTime);
-        window.draw(circleTransElastic);
-
-        transitionTransBounce.tick(elapsedTime);
-        window.draw(circleTransBounce);
 
         transitionTransQuart.tick(elapsedTime);
         window.draw(circleTransQuart);
@@ -408,17 +442,47 @@ int main()
         transitionTransQuint.tick(elapsedTime);
         window.draw(circleTransQuint);
 
+        transitionTransSextic.tick(elapsedTime);
+        window.draw(circleTransSextic);
+
+        transitionTransSeptic.tick(elapsedTime);
+        window.draw(circleTransSeptic);
+
+        transitionTransOctic.tick(elapsedTime);
+        window.draw(circleTransOctic);
+
+        transitionTransNonic.tick(elapsedTime);
+        window.draw(circleTransNonic);
+
+        transitionTransDecic.tick(elapsedTime);
+        window.draw(circleTransDecic);
+
+        transitionTransPoly.tick(elapsedTime);
+        window.draw(circleTransPoly);
+
+        transitionTransSmoothStep.tick(elapsedTime);
+        window.draw(circleTransSmoothStep);
+
+        transitionTransSmootherStep.tick(elapsedTime);
+        window.draw(circleTransSmootherStep);
+
+        transitionTransBounce.tick(elapsedTime);
+        window.draw(circleTransBounce);
+
+        transitionTransElastic.tick(elapsedTime);
+        window.draw(circleTransElastic);
+
+        transitionTransSine.tick(elapsedTime);
+        window.draw(circleTransSine);
+
         transitionTransExpo.tick(elapsedTime);
         window.draw(circleTransExpo);
 
         transitionTransCirc.tick(elapsedTime);
         window.draw(circleTransCirc);
 
-        transitionTransSextic.tick(elapsedTime);
-        window.draw(circleTransSextic);
-
-        transitionTransPoly.tick(elapsedTime);
-        window.draw(circleTransPoly);
+        transitionTransBack.tick(elapsedTime);
+        window.draw(circleTransBack);
 
         // End the current frame
         window.display();
