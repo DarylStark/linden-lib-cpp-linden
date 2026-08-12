@@ -2,6 +2,7 @@
 #include "game.hpp"
 #include "transition.hpp"
 #include <SFML/Graphics.hpp>
+#include <chrono>
 #include <cmath>
 #include <iostream>
 #include <memory>
@@ -105,10 +106,20 @@ int main()
         }
 
         // 'tick' all transition
-        for (auto &transition : transitions)
+        for (auto it = transitions.begin(); it != transitions.end();)
         {
-            transition.tick(transitionClock.getElapsedTime().asMicroseconds());
+            it->tick(transitionClock.getElapsedTime().asMicroseconds());
+            if (it->isDone())
+            {
+                it = transitions.erase(it);
+            }
+            else
+            {
+                ++it;
+            }
         }
+
+        std::cout << transitions.size() << '\n';
 
         // Clear the window
         window.clear(sf::Color::Black);
@@ -187,7 +198,6 @@ int main()
                         math::easing::linear, 750'000,
                         [&frontsideSprites](float n)
                         {
-                            std::cout << "running\n";
                             for (auto &s : frontsideSprites)
                             {
                                 s.setColor(
