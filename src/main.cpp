@@ -16,7 +16,7 @@ int main()
     const std::vector<uint32_t> &cards = memory.getCardIds();
 
     // Window setup
-    sf::RenderWindow window(sf::VideoMode({900, 1650}), "My window",
+    sf::RenderWindow window(sf::VideoMode({850, 600}), "My window",
                             sf::Style::None | sf::Style::Titlebar,
                             sf::State::Windowed);
     window.setFramerateLimit(60);
@@ -67,51 +67,20 @@ int main()
     sf::Text textResult(fontScore, "", 30);
     textResult.setPosition({562 + 128 + 10, 50});
 
-    // Set up for transitioning
-    float radius = 25;
-    float y = 10;
-    uint64_t duration = 2'500'000;
-
-    // Linear
-    sf::CircleShape circleTrans01(radius);
-    circleTrans01.setFillColor(sf::Color({255, 0, 0}));
-    circleTrans01.setPosition({1, y});
-    graphics::Transition trans01(math::easing::inBack, duration,
-                                 [&circleTrans01, radius, y](float n)
-                                 {
-                                     float x =
-                                         std::lerp(0, 900 - (radius * 2), n);
-                                     circleTrans01.setPosition({x, y});
-                                 });
-
-    // Quad
-    y += 60;
-    sf::CircleShape circleTrans02(radius);
-    circleTrans02.setFillColor(sf::Color({0, 255, 0}));
-    circleTrans02.setPosition({1, y});
-    graphics::Transition trans02(math::easing::outBack, duration,
-                                 [&circleTrans02, radius, y](float n)
-                                 {
-                                     float x =
-                                         std::lerp(0, 900 - (radius * 2), n);
-                                     circleTrans02.setPosition({x, y});
-                                 });
-
-    // Cubic
-    y += 60;
-    sf::CircleShape circleTrans03(radius);
-    circleTrans03.setFillColor(sf::Color({0, 0, 255}));
-    circleTrans03.setPosition({1, y});
-    graphics::Transition trans03(math::easing::inOutBack, duration,
-                                 [&circleTrans03, radius, y](float n)
-                                 {
-                                     float x =
-                                         std::lerp(0, 900 - (radius * 2), n);
-                                     circleTrans03.setPosition({x, y});
-                                 });
-
     sf::Clock clock;
     sf::Clock transitionClock;
+
+    std::vector<graphics::Transition> transitions;
+    transitions.emplace_back(
+        math::easing::inOutQuad, 1'000'000,
+        [&spriteBackside](float n)
+        {
+            spriteBackside.setRotation(sf::degrees(n * 360));
+            spriteBackside.setScale({n, n});
+            spriteBackside.setColor({255, 255, 255, 255 * n});
+        });
+
+    bool animationSet = false;
 
     while (window.isOpen())
     {
@@ -129,6 +98,12 @@ int main()
             {
                 lastClick = mouseClick->position;
             }
+        }
+
+        // 'tick' all transition
+        for (auto &transition : transitions)
+        {
+            transition.tick(transitionClock.getElapsedTime().asMicroseconds());
         }
 
         // Clear the window
@@ -201,16 +176,32 @@ int main()
             {
                 textResult.setString("GOOD!");
                 textResult.setFillColor(sf::Color::Green);
+
+                if (!animationSet)
+                {
+                    transitions.emplace_back(
+                        math::easing::linear, 750'000,
+                        [&frontsideSprites](float n)
+                        {
+                            std::cout << "running\n";
+                            for (auto &s : frontsideSprites)
+                            {
+                                s.setColor({255, 255, 255, 255 - (255 * n)});
+                            }
+                        });
+                    animationSet = true;
+                }
+
+                if (clock.getElapsedTime().asMilliseconds() >= 750)
+                {
+                    memory.makeTurn();
+                    animationSet = false;
+                }
             }
             else
             {
                 textResult.setString("WRONG!");
                 textResult.setFillColor(sf::Color::Red);
-            }
-
-            if (clock.getElapsedTime().asMilliseconds() >= 750)
-            {
-                memory.makeTurn();
             }
         }
 
@@ -218,15 +209,6 @@ int main()
 
         // Transition practicing
         auto elapsedTime = transitionClock.getElapsedTime().asMicroseconds();
-
-        trans01.tick(elapsedTime);
-        window.draw(circleTrans01);
-
-        trans02.tick(elapsedTime);
-        window.draw(circleTrans02);
-
-        trans03.tick(elapsedTime);
-        window.draw(circleTrans03);
 
         // End the current frame
         window.display();
