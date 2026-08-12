@@ -1,3 +1,4 @@
+#include "easing.hpp"
 #include "game.hpp"
 #include "transition.hpp"
 #include <SFML/Graphics.hpp>
@@ -72,12 +73,15 @@ int main()
 
     std::vector<graphics::Transition> transitions;
     transitions.emplace_back(
-        math::easing::inOutQuad, 1'000'000,
+        math::easing::outElastic, 1'250'000,
         [&spriteBackside](float n)
         {
             spriteBackside.setRotation(sf::degrees(n * 360));
+            n = std::clamp(n, 0.0f, 1.1f);
             spriteBackside.setScale({n, n});
-            spriteBackside.setColor({255, 255, 255, 255 * n});
+            n = std::clamp(n, 0.0f, 1.0f);
+            spriteBackside.setColor(
+                {255, 255, 255, static_cast<uint8_t>(255 * n)});
         });
 
     bool animationSet = false;
@@ -186,7 +190,9 @@ int main()
                             std::cout << "running\n";
                             for (auto &s : frontsideSprites)
                             {
-                                s.setColor({255, 255, 255, 255 - (255 * n)});
+                                s.setColor(
+                                    {255, 255, 255,
+                                     static_cast<uint8_t>(255 - (255 * n))});
                             }
                         });
                     animationSet = true;

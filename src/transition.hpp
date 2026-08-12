@@ -1,6 +1,5 @@
 #pragma once
 
-#include "easing.hpp"
 #include <cstdint>
 #include <functional>
 #include <memory>
