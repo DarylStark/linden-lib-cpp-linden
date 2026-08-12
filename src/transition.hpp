@@ -23,6 +23,11 @@ namespace graphics
         Transition(EasingFunction easingFn, uint64_t durationUs,
                    TransitionCallback callback) noexcept;
 
+        // TODO: rename to `update`
+        // TODO: take in a more "C++"'y type. Something from `std::chrono`?
+        // TODO: make this method return the value for the transition
+        // TODO: make the callback optional
+        // TODO: add a state (pending, running, done) so we can filter
         void tick(uint64_t dt);
 
         void reset();
