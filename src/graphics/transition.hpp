@@ -27,15 +27,14 @@ namespace graphics
 
         TransitionState _state = TransitionState::PENDING;
 
+        void _runCallback(uint64_t normalizedProgress);
+
     public:
         Transition(EasingFunction easingFn, uint64_t durationUs,
-                   TransitionCallback callback);
+                   TransitionCallback callback = nullptr);
 
-        // TODO: rename to `update`
         // TODO: take in a more "C++"'y type. Something from `std::chrono`?
-        // TODO: make this method return the value for the transition
-        // TODO: make the callback optional
-        void tick(uint64_t elapsedUs);
+        virtual float update(uint64_t elapsedUs);
 
         void reset();
 

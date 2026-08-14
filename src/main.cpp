@@ -1,6 +1,6 @@
 #include "easing.hpp"
 #include "game.hpp"
-#include "transition.hpp"
+#include "graphics.hpp"
 #include <SFML/Graphics.hpp>
 #include <chrono>
 #include <cmath>
@@ -108,7 +108,7 @@ int main()
         // 'tick' all transition
         for (auto it = transitions.begin(); it != transitions.end();)
         {
-            it->tick(transitionClock.getElapsedTime().asMicroseconds());
+            it->update(transitionClock.getElapsedTime().asMicroseconds());
             if (it->isDone())
             {
                 it = transitions.erase(it);

@@ -9,11 +9,18 @@ namespace graphics
     {
     }
 
-    void Transition::tick(uint64_t elapsedUs)
+    void Transition::_runCallback(uint64_t normalizedProgress)
+    {
+        if (!_callback)
+            return;
+        _callback(_easingFn(normalizedProgress));
+    }
+
+    float Transition::update(uint64_t elapsedUs)
     {
         if (_state == TransitionState::DONE)
         {
-            return;
+            return 1.0;
         }
 
         if (_state == TransitionState::PENDING)
@@ -23,27 +30,16 @@ namespace graphics
         }
 
         // Get the normalized detla time
-        float normalized = 0;
         uint64_t runtime = elapsedUs - _startTime;
 
-        if (runtime > 0)
-        {
-            normalized =
-                static_cast<float>(runtime) / static_cast<float>(_durationUs);
-            // TODO: Clamp
-        }
+        float normalized =
+            static_cast<float>(runtime) / static_cast<float>(_durationUs);
 
         normalized = std::clamp(normalized, 0.0f, 1.0f);
 
-        if (_callback)
-        {
-            _callback(_easingFn(normalized));
-        }
+        _runCallback(normalized);
 
-        if (runtime > _durationUs)
-        {
-            _state = TransitionState::DONE;
-        }
+        return normalized;
     }
 
     void Transition::reset()
