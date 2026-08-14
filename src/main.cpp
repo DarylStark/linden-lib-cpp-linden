@@ -74,8 +74,9 @@ int main()
 
     const auto introTransition = [](sf::Sprite &sprite, float n)
     {
-        sprite.setRotation(sf::degrees(n * 360));
-        n = std::clamp(n, 0.0f, 1.1f);
+        std::cout << n << '\n';
+        // sprite.setRotation(sf::degrees(n * 360));
+        // n = std::clamp(n, 0.0f, 1.1f);
         sprite.setScale({n, n});
         n = std::clamp(n, 0.0f, 1.0f);
         sprite.setColor({255, 255, 255, static_cast<uint8_t>(255 * n)});
