@@ -23,7 +23,7 @@ int main()
     sf::RenderWindow window(sf::VideoMode({850, 600}), "My window",
                             sf::Style::None | sf::Style::Titlebar,
                             sf::State::Windowed);
-    window.setFramerateLimit(60);
+    // window.setFramerateLimit(60);
 
     // Backside of the cards
     sf::Texture textureBackside;
@@ -92,6 +92,7 @@ int main()
 
     while (window.isOpen())
     {
+        auto startTime = std::chrono::steady_clock::now();
         sf::Vector2i lastClick(0, 0);
 
         // Event handeling
@@ -111,7 +112,8 @@ int main()
         // 'tick' all transition
         for (auto it = transitions.begin(); it != transitions.end();)
         {
-            it->update(transitionClock.getElapsedTime().asMicroseconds());
+            it->update(std::chrono::microseconds(
+                transitionClock.getElapsedTime().asMicroseconds()));
             if (it->isDone())
             {
                 it = transitions.erase(it);
@@ -228,10 +230,15 @@ int main()
         // Transition practicing
         auto elapsedTime = transitionClock.getElapsedTime().asMicroseconds();
 
-        std::clog << "Transition count: " << transitions.size() << '\n';
-
         // End the current frame
         window.display();
+
+        auto endTime = std::chrono::steady_clock::now();
+        auto runtime = std::chrono::duration_cast<std::chrono::microseconds>(
+            endTime - startTime);
+        float fps = 1'000'000 / static_cast<float>(runtime.count());
+        // std::clog << "FPS: " << fps << '\n';
+        std::printf("FPS: %f\n", fps);
     }
 
     return 0;

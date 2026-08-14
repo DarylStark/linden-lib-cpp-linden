@@ -17,7 +17,7 @@ namespace graphics
         _callback(_easingFn(normalizedProgress));
     }
 
-    float Transition::update(uint64_t elapsedUs)
+    float Transition::update(std::chrono::microseconds elapsedUs)
     {
         if (_state == TransitionState::DONE)
         {
@@ -31,9 +31,9 @@ namespace graphics
         }
 
         // Get the normalized detla time
-        uint64_t runtime = elapsedUs - _startTime;
+        auto runtime = elapsedUs - _startTime;
 
-        float normalized = static_cast<float>(runtime) /
+        float normalized = static_cast<float>(runtime.count()) /
                            static_cast<float>(_durationUs.count());
 
         normalized = std::clamp(normalized, 0.0f, 1.0f);
@@ -50,7 +50,8 @@ namespace graphics
 
     void Transition::reset()
     {
-        _startTime = 0;
+        using namespace std::chrono_literals;
+        _startTime = 0us;
         _state = TransitionState::PENDING;
     }
 

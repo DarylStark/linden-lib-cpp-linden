@@ -21,7 +21,7 @@ namespace graphics
     {
     private:
         std::chrono::microseconds _durationUs;
-        uint64_t _startTime{};
+        std::chrono::microseconds _startTime{};
 
         EasingFunction _easingFn;
         TransitionCallback _callback;
@@ -35,8 +35,7 @@ namespace graphics
                    std::chrono::microseconds durationUs,
                    TransitionCallback callback = nullptr);
 
-        // TODO: take in a more "C++"'y type. Something from `std::chrono`?
-        virtual float update(uint64_t elapsedUs);
+        float update(std::chrono::microseconds elapsedUs);
 
         void reset();
 
