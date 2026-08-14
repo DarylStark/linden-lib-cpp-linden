@@ -74,10 +74,9 @@ int main()
 
     const auto introTransition = [](sf::Sprite &sprite, float n)
     {
-        std::cout << n << '\n';
-        // sprite.setRotation(sf::degrees(n * 360));
-        // n = std::clamp(n, 0.0f, 1.1f);
         sprite.setScale({n, n});
+
+        // Need to clamp from preventing the alpha from overflowing
         n = std::clamp(n, 0.0f, 1.0f);
         sprite.setColor({255, 255, 255, static_cast<uint8_t>(255 * n)});
     };
@@ -195,7 +194,7 @@ int main()
                 if (!animationSet)
                 {
                     transitions.emplace_back(
-                        math::easing::linear, 750'000,
+                        math::easing::smootherStep, 500'000,
                         [&frontsideSprites](float n)
                         {
                             for (auto &s : frontsideSprites)
@@ -225,6 +224,8 @@ int main()
 
         // Transition practicing
         auto elapsedTime = transitionClock.getElapsedTime().asMicroseconds();
+
+        std::clog << "Transition count: " << transitions.size() << '\n';
 
         // End the current frame
         window.display();
