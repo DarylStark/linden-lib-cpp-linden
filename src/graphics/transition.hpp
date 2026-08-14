@@ -1,5 +1,6 @@
 #pragma once
 
+#include <chrono>
 #include <cstdint>
 #include <functional>
 #include <memory>
@@ -19,7 +20,7 @@ namespace graphics
     class Transition
     {
     private:
-        uint64_t _durationUs;
+        std::chrono::microseconds _durationUs;
         uint64_t _startTime{};
 
         EasingFunction _easingFn;
@@ -30,7 +31,8 @@ namespace graphics
         void _runCallback(float normalizedProgress);
 
     public:
-        Transition(EasingFunction easingFn, uint64_t durationUs,
+        Transition(EasingFunction easingFn,
+                   std::chrono::microseconds durationUs,
                    TransitionCallback callback = nullptr);
 
         // TODO: take in a more "C++"'y type. Something from `std::chrono`?

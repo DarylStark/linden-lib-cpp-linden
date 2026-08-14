@@ -11,6 +11,8 @@
 
 int main()
 {
+    using namespace std::chrono_literals;
+
     // Game setup
     uint32_t pairCount = 10;
     game::MemoryGame memory(pairCount);
@@ -82,7 +84,7 @@ int main()
     };
 
     std::vector<graphics::Transition> transitions;
-    transitions.emplace_back(math::easing::outElastic, 1'250'000,
+    transitions.emplace_back(math::easing::outElastic, 1250ms,
                              [&spriteBackside, &introTransition](float n)
                              { introTransition(spriteBackside, n); });
 
@@ -194,7 +196,8 @@ int main()
                 if (!animationSet)
                 {
                     transitions.emplace_back(
-                        math::easing::smootherStep, 500'000,
+                        math::easing::smootherStep,
+                        std::chrono::microseconds(500'000),
                         [&frontsideSprites](float n)
                         {
                             for (auto &s : frontsideSprites)
