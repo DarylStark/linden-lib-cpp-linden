@@ -72,18 +72,19 @@ int main()
     sf::Clock clock;
     sf::Clock transitionClock;
 
+    const auto introTransition = [](sf::Sprite &sprite, float n)
+    {
+        sprite.setRotation(sf::degrees(n * 360));
+        n = std::clamp(n, 0.0f, 1.1f);
+        sprite.setScale({n, n});
+        n = std::clamp(n, 0.0f, 1.0f);
+        sprite.setColor({255, 255, 255, static_cast<uint8_t>(255 * n)});
+    };
+
     std::vector<graphics::Transition> transitions;
-    transitions.emplace_back(
-        math::easing::outElastic, 1'250'000,
-        [&spriteBackside](float n)
-        {
-            spriteBackside.setRotation(sf::degrees(n * 360));
-            n = std::clamp(n, 0.0f, 1.1f);
-            spriteBackside.setScale({n, n});
-            n = std::clamp(n, 0.0f, 1.0f);
-            spriteBackside.setColor(
-                {255, 255, 255, static_cast<uint8_t>(255 * n)});
-        });
+    transitions.emplace_back(math::easing::outElastic, 1'250'000,
+                             [&spriteBackside, &introTransition](float n)
+                             { introTransition(spriteBackside, n); });
 
     bool animationSet = false;
 
@@ -118,8 +119,6 @@ int main()
                 ++it;
             }
         }
-
-        std::cout << transitions.size() << '\n';
 
         // Clear the window
         window.clear(sf::Color::Black);

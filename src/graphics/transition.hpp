@@ -27,7 +27,7 @@ namespace graphics
 
         TransitionState _state = TransitionState::PENDING;
 
-        void _runCallback(uint64_t normalizedProgress);
+        void _runCallback(float normalizedProgress);
 
     public:
         Transition(EasingFunction easingFn, uint64_t durationUs,

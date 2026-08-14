@@ -9,7 +9,7 @@ namespace graphics
     {
     }
 
-    void Transition::_runCallback(uint64_t normalizedProgress)
+    void Transition::_runCallback(float normalizedProgress)
     {
         if (!_callback)
             return;
