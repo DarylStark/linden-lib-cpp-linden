@@ -39,6 +39,11 @@ namespace graphics
 
         _runCallback(normalized);
 
+        if (normalized == 1.0)
+        {
+            _state = TransitionState::DONE;
+        }
+
         return normalized;
     }
 
