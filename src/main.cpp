@@ -74,6 +74,9 @@ int main()
     sf::Clock clock;
     sf::Clock transitionClock;
 
+    graphics::StlClock stlClock;
+    graphics::TransitionManager tm(stlClock);
+
     const auto introTransition = [](sf::Sprite &sprite, float n)
     {
         sprite.setScale({n, n});
@@ -85,11 +88,10 @@ int main()
 
     auto l = [&spriteBackside, &introTransition](float n)
     { introTransition(spriteBackside, n); };
-    std::vector<std::unique_ptr<graphics::Transition>> transitions;
     for (size_t idx = 0; idx < frontsideTextures.size() * 2; ++idx)
     {
-        transitions.emplace_back(std::make_unique<graphics::CallbackTransition>(
-            math::easing::outElastic, 1250ms, l, 12ms * idx));
+        tm.addTransition<graphics::CallbackTransition>(math::easing::outElastic,
+                                                       1250ms, l, 50ms * idx);
     }
 
     bool animationSet = false;
@@ -100,6 +102,7 @@ int main()
     {
         auto startTime = std::chrono::steady_clock::now();
         sf::Vector2i lastClick(0, 0);
+        // tm.updateAll(true);
 
         // Event handeling
         while (const std::optional event = window.pollEvent())
@@ -157,11 +160,8 @@ int main()
 
             if (!memory.isSelected(idx))
             {
-                const auto res =
-                    transitions[idx]->update(std::chrono::microseconds(
-                        transitionClock.getElapsedTime().asMicroseconds()));
-
                 spriteBackside.setPosition(pos);
+                tm.update(idx, true);
                 window.draw(spriteBackside);
                 if (spriteBackside.getGlobalBounds().contains(
                         {mousePos.x, mousePos.y}))
@@ -215,24 +215,6 @@ int main()
         auto runtime = std::chrono::duration_cast<std::chrono::microseconds>(
             endTime - startTime);
         float fps = 1'000'000 / static_cast<float>(runtime.count());
-
-        auto fullRunTime = endTime - beforeLoop;
-        if (fullRunTime > 200ms)
-        {
-            for (auto &t : transitions)
-            {
-                t->pause(std::chrono::microseconds(
-                    transitionClock.getElapsedTime().asMicroseconds()));
-            }
-        }
-        if (fullRunTime > 1200ms)
-        {
-            for (auto &t : transitions)
-            {
-                t->resume(std::chrono::microseconds(
-                    transitionClock.getElapsedTime().asMicroseconds()));
-            }
-        }
     }
 
     return 0;
