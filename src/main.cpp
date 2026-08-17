@@ -77,26 +77,32 @@ int main()
     graphics::StlClock stlClock;
     graphics::TransitionManager tm(stlClock);
 
-    const auto introTransition = [](sf::Sprite &sprite, float n)
+    const auto introTransition = [&spriteBackside](float n)
     {
-        sprite.setScale({n, n});
+        spriteBackside.setScale({n, n});
 
         // Need to clamp from preventing the alpha from overflowing
         n = std::clamp(n, 0.0f, 1.0f);
-        sprite.setColor({255, 255, 255, static_cast<uint8_t>(255 * n)});
+        spriteBackside.setColor({255, 255, 255, static_cast<uint8_t>(255 * n)});
     };
+    std::vector<float> values(20);
 
-    auto l = [&spriteBackside, &introTransition](float n)
-    { introTransition(spriteBackside, n); };
     for (size_t idx = 0; idx < frontsideTextures.size() * 2; ++idx)
     {
-        tm.addTransition<graphics::CallbackTransition>(math::easing::outElastic,
-                                                       1250ms, l, 50ms * idx);
+        tm.addTransition<graphics::CallbackTransition>(
+            math::easing::outElastic, 1250ms,
+            [&values, idx](float n) { values[idx] = n; }, 50ms * idx);
     }
 
-    tm.addTransition<graphics::CallbackTransition>(math::easing::outElastic,
-                                                   10s, [&window](float n)
-                                                   { std::cout << n << '\n'; });
+    sf::Color background = {255, 0, 0};
+
+    tm.addTransition<graphics::CallbackTransition>(
+        math::easing::inOutQuad, 2s,
+        [&background](float n)
+        {
+            n = std::clamp(n, 0.0f, 1.0f);
+            background.r = 255 - 255.f * n;
+        });
 
     bool animationSet = false;
 
@@ -106,7 +112,7 @@ int main()
     {
         auto startTime = std::chrono::steady_clock::now();
         sf::Vector2i lastClick(0, 0);
-        // tm.updateAll(true);
+        tm.updateAll();
 
         // Event handeling
         while (const std::optional event = window.pollEvent())
@@ -123,7 +129,7 @@ int main()
         }
 
         // Clear the window
-        window.clear(sf::Color::Black);
+        window.clear(background);
 
         // Get mouse position
         const auto mousePos =
@@ -165,7 +171,7 @@ int main()
             if (!memory.isSelected(idx))
             {
                 spriteBackside.setPosition(pos);
-                tm.update(idx, true);
+                introTransition(values[idx]);
                 window.draw(spriteBackside);
                 if (spriteBackside.getGlobalBounds().contains(
                         {mousePos.x, mousePos.y}))
