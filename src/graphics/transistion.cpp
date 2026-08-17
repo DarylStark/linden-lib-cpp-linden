@@ -4,9 +4,10 @@ namespace graphics
 {
     Transition::Transition(EasingFunction easingFn,
                            std::chrono::microseconds durationUs,
-                           TransitionCallback callback)
+                           TransitionCallback callback,
+                           std::chrono::microseconds delayUs)
         : _easingFn(std::move(easingFn)), _callback(std::move(callback)),
-          _durationUs(durationUs)
+          _durationUs(durationUs), _delayUs(delayUs)
     {
     }
 
@@ -31,7 +32,7 @@ namespace graphics
         }
 
         // Get the normalized detla time
-        auto runtime = elapsedUs - _startTime;
+        auto runtime = elapsedUs - _startTime - _delayUs;
 
         float normalized = static_cast<float>(runtime.count()) /
                            static_cast<float>(_durationUs.count());

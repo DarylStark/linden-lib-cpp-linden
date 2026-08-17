@@ -84,9 +84,13 @@ int main()
     };
 
     std::vector<graphics::Transition> transitions;
-    transitions.emplace_back(math::easing::outElastic, 1250ms,
-                             [&spriteBackside, &introTransition](float n)
-                             { introTransition(spriteBackside, n); });
+    for (size_t idx = 0; idx < frontsideTextures.size() * 2; ++idx)
+    {
+        transitions.emplace_back(
+            math::easing::outElastic, 1250ms,
+            [&spriteBackside, &introTransition](float n)
+            { introTransition(spriteBackside, n); }, 50ms * idx);
+    }
 
     bool animationSet = false;
 
@@ -110,19 +114,19 @@ int main()
         }
 
         // 'tick' all transition
-        for (auto it = transitions.begin(); it != transitions.end();)
-        {
-            it->update(std::chrono::microseconds(
-                transitionClock.getElapsedTime().asMicroseconds()));
-            if (it->isDone())
-            {
-                it = transitions.erase(it);
-            }
-            else
-            {
-                ++it;
-            }
-        }
+        // for (auto it = transitions.begin(); it != transitions.end();)
+        // {
+        //     it->update(std::chrono::microseconds(
+        //         transitionClock.getElapsedTime().asMicroseconds()));
+        //     if (it->isDone())
+        //     {
+        //         it = transitions.erase(it);
+        //     }
+        //     else
+        //     {
+        //         ++it;
+        //     }
+        // }
 
         // Clear the window
         window.clear(sf::Color::Black);
@@ -166,6 +170,9 @@ int main()
 
             if (!memory.isSelected(idx))
             {
+                transitions[idx].update(std::chrono::microseconds(
+                    transitionClock.getElapsedTime().asMicroseconds()));
+
                 spriteBackside.setPosition(pos);
                 window.draw(spriteBackside);
                 if (spriteBackside.getGlobalBounds().contains(
@@ -237,8 +244,6 @@ int main()
         auto runtime = std::chrono::duration_cast<std::chrono::microseconds>(
             endTime - startTime);
         float fps = 1'000'000 / static_cast<float>(runtime.count());
-        // std::clog << "FPS: " << fps << '\n';
-        std::printf("FPS: %f\n", fps);
     }
 
     return 0;

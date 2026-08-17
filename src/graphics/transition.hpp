@@ -21,6 +21,7 @@ namespace graphics
     {
     private:
         std::chrono::microseconds _durationUs;
+        std::chrono::microseconds _delayUs{};
         std::chrono::microseconds _startTime{};
 
         EasingFunction _easingFn;
@@ -31,9 +32,10 @@ namespace graphics
         void _runCallback(float normalizedProgress);
 
     public:
-        Transition(EasingFunction easingFn,
-                   std::chrono::microseconds durationUs,
-                   TransitionCallback callback = nullptr);
+        Transition(
+            EasingFunction easingFn, std::chrono::microseconds durationUs,
+            TransitionCallback callback = nullptr,
+            std::chrono::microseconds delayUs = std::chrono::microseconds(0));
 
         float update(std::chrono::microseconds elapsedUs);
 
