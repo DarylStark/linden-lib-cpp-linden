@@ -29,16 +29,24 @@ namespace graphics
         }
 
         // Get the normalized detla time
-        auto runtime = elapsedUs - _startTime - _delayUs;
+        auto elapsedSinceStart = elapsedUs - _startTime;
 
-        float normalized = static_cast<float>(runtime.count()) /
+        if (elapsedSinceStart < _delayUs)
+        {
+            _update(_easingFn(0.0f));
+            return 0.0f;
+        }
+
+        auto activeTime = elapsedSinceStart - _delayUs;
+
+        float normalized = static_cast<float>(activeTime.count()) /
                            static_cast<float>(_durationUs.count());
 
         normalized = std::clamp(normalized, 0.0f, 1.0f);
 
         _update(_easingFn(normalized));
 
-        if (normalized == 1.0)
+        if (normalized >= 1.0)
         {
             _state = TransitionState::DONE;
         }
