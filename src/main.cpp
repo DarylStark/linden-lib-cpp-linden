@@ -80,7 +80,7 @@ int main()
 
         // Need to clamp from preventing the alpha from overflowing
         n = std::clamp(n, 0.0f, 1.0f);
-        // sprite.setColor({255, 255, 255, static_cast<uint8_t>(255 * n)});
+        sprite.setColor({255, 255, 255, static_cast<uint8_t>(255 * n)});
     };
 
     auto l = [&spriteBackside, &introTransition](float n)
@@ -89,7 +89,7 @@ int main()
     for (size_t idx = 0; idx < frontsideTextures.size() * 2; ++idx)
     {
         transitions.emplace_back(std::make_unique<graphics::CallbackTransition>(
-            math::easing::outElastic, 1250ms, l, 62ms * idx));
+            math::easing::outElastic, 1250ms, l, 12ms * idx));
     }
 
     bool animationSet = false;

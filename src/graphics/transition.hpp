@@ -16,6 +16,13 @@ namespace graphics
         DONE
     };
 
+    struct UpdateResult
+    {
+        float normalizedProgress;
+        float easedProgress;
+        TransitionState state;
+    };
+
     class Transition
     {
     private:
@@ -37,7 +44,7 @@ namespace graphics
             EasingFunction easingFn, std::chrono::microseconds durationUs,
             std::chrono::microseconds delayUs = std::chrono::microseconds(0));
 
-        float update(std::chrono::microseconds elapsedUs);
+        UpdateResult update(std::chrono::microseconds elapsedUs);
 
         void reset();
 

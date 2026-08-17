@@ -67,17 +67,17 @@ namespace math
             }
             else if (t < 2.0f / d1)
             {
-                float x = x - (1.5f / d1);
+                float x = t - (1.5f / d1); // GEFIXED: 't' gebruikt i.p.v. 'x'
                 return n1 * x * x + 0.75f;
             }
             else if (t < 2.625f / d1)
             {
-                float x = x - (2.25f / d1);
+                float x = t - (2.25f / d1); // GEFIXED: 't' gebruikt i.p.v. 'x'
                 return n1 * x * x + 0.9375f;
             }
             else
             {
-                float x = x - (2.625f / d1);
+                float x = t - (2.625f / d1); // GEFIXED: 't' gebruikt i.p.v. 'x'
                 return n1 * x * x + 0.984375f;
             }
         }

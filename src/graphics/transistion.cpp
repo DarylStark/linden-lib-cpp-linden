@@ -1,4 +1,6 @@
 #include "transition.hpp"
+#include <iostream>
+#include <utility>
 
 namespace graphics
 {
@@ -42,7 +44,7 @@ namespace graphics
         return normalized;
     }
 
-    float Transition::update(std::chrono::microseconds elapsedUs)
+    UpdateResult Transition::update(std::chrono::microseconds elapsedUs)
     {
         if (_state == TransitionState::PENDING)
         {
@@ -50,15 +52,16 @@ namespace graphics
             _state = TransitionState::RUNNING;
         }
 
-        float normalized = _getNormalizedProgress(elapsedUs);
-        _update(_easingFn(normalized));
+        float normalizedProgress = _getNormalizedProgress(elapsedUs);
+        float easedProgress = _easingFn(normalizedProgress);
+        _update(easedProgress);
 
-        if (normalized >= 1.0)
+        if (normalizedProgress >= 1.0)
         {
             _state = TransitionState::DONE;
         }
 
-        return normalized;
+        return {normalizedProgress, easedProgress, _state};
     }
 
     void Transition::reset()
