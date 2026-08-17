@@ -94,6 +94,10 @@ int main()
                                                        1250ms, l, 50ms * idx);
     }
 
+    tm.addTransition<graphics::CallbackTransition>(math::easing::outElastic,
+                                                   10s, [&window](float n)
+                                                   { std::cout << n << '\n'; });
+
     bool animationSet = false;
 
     auto beforeLoop = std::chrono::steady_clock::now();

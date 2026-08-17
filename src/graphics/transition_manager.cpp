@@ -1,5 +1,4 @@
 #include "transition_manager.hpp"
-#include <iostream>
 
 namespace graphics
 {
@@ -23,8 +22,6 @@ namespace graphics
             }
             ++it;
         }
-
-        std::cout << "Length: " << _transitions.size() << '\n';
     }
 
     void TransitionManager::update(std::size_t index, bool autoRemove)
@@ -40,7 +37,5 @@ namespace graphics
                 it = _transitions.erase(it);
             }
         }
-
-        std::cout << "Length: " << _transitions.size() << '\n';
     }
 } // namespace graphics
