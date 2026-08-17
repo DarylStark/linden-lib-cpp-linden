@@ -17,62 +17,111 @@ namespace graphics
         // Default `_update` doesn't do anything
     }
 
-    float Transition::_getNormalizedProgress(
+    float Transition::_calculateLinearProgress(
         std::chrono::microseconds elapsedUs) const
     {
-        if (_state == TransitionState::DONE)
+        if (_state == TransitionState::Done)
         {
-            return 1.0;
+            return 1.0f;
         }
 
-        if (_state != TransitionState::RUNNING)
-        {
-            return 0.0f;
-        }
-
-        auto elapsedSinceStart = elapsedUs - _startTime;
-
-        if (elapsedSinceStart < _delayUs)
+        if (_state != TransitionState::Running &&
+            _state != TransitionState::Paused)
         {
             return 0.0f;
         }
 
-        auto activeTime = elapsedSinceStart - _delayUs;
+        auto currentOrPauseTime =
+            (_state == TransitionState::Paused) ? _pauseStartTime : elapsedUs;
+
+        auto activeTime = (currentOrPauseTime - _startTime) - _delayUs;
         float normalized = static_cast<float>(activeTime.count()) /
                            static_cast<float>(_durationUs.count());
-        normalized = std::clamp(normalized, 0.0f, 1.0f);
-        return normalized;
+
+        return std::clamp(normalized, 0.0f, 1.0f);
     }
 
     UpdateResult Transition::update(std::chrono::microseconds elapsedUs)
     {
-        if (_state == TransitionState::PENDING)
+        bool isFirstRunningFrame = false;
+
+        if (_state == TransitionState::Paused)
+        {
+            float normalizedProgress = _calculateLinearProgress(elapsedUs);
+            float easedProgress = _easingFn(normalizedProgress);
+
+            _update(easedProgress);
+
+            return {normalizedProgress, easedProgress, _state, false};
+        }
+
+        if (_state == TransitionState::Pending)
         {
             _startTime = elapsedUs;
-            _state = TransitionState::RUNNING;
+
+            if (_delayUs > std::chrono::microseconds::zero())
+            {
+                _state = TransitionState::Delayed;
+            }
+            else
+            {
+                _state = TransitionState::Running;
+                isFirstRunningFrame = true;
+            }
         }
 
-        float normalizedProgress = _getNormalizedProgress(elapsedUs);
+        if (_state == TransitionState::Delayed)
+        {
+            if ((elapsedUs - _startTime) >= _delayUs)
+            {
+                _state = TransitionState::Running;
+                isFirstRunningFrame = true;
+            }
+        }
+
+        float normalizedProgress = _calculateLinearProgress(elapsedUs);
         float easedProgress = _easingFn(normalizedProgress);
+
         _update(easedProgress);
 
-        if (normalizedProgress >= 1.0)
+        if (_state == TransitionState::Running && normalizedProgress >= 1.0f)
         {
-            _state = TransitionState::DONE;
+            _state = TransitionState::Done;
         }
 
-        return {normalizedProgress, easedProgress, _state};
+        return {normalizedProgress, easedProgress, _state, isFirstRunningFrame};
+    }
+
+    void Transition::pause(std::chrono::microseconds elapsedUs)
+    {
+        if (_state == TransitionState::Delayed ||
+            _state == TransitionState::Running)
+        {
+            _stateBeforePause = _state;
+            _state = TransitionState::Paused;
+            _pauseStartTime = elapsedUs;
+        }
+    }
+
+    void Transition::resume(std::chrono::microseconds elapsedUs)
+    {
+        if (_state == TransitionState::Paused)
+        {
+            auto pausedDuration = elapsedUs - _pauseStartTime;
+            _startTime += pausedDuration;
+            _state = _stateBeforePause;
+        }
     }
 
     void Transition::reset()
     {
         using namespace std::chrono_literals;
         _startTime = 0us;
-        _state = TransitionState::PENDING;
+        _state = TransitionState::Pending;
     }
 
     bool Transition::isDone() const
     {
-        return _state == TransitionState::DONE;
+        return _state == TransitionState::Done;
     }
 } // namespace graphics

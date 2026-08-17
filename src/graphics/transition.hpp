@@ -11,9 +11,11 @@ namespace graphics
 
     enum class TransitionState
     {
-        PENDING,
-        RUNNING,
-        DONE
+        Pending,
+        Delayed,
+        Running,
+        Paused,
+        Done
     };
 
     struct UpdateResult
@@ -21,20 +23,26 @@ namespace graphics
         float normalizedProgress;
         float easedProgress;
         TransitionState state;
+        bool isFirstFrame;
     };
 
     class Transition
     {
     private:
         std::chrono::microseconds _durationUs;
-        std::chrono::microseconds _delayUs{};
-        std::chrono::microseconds _startTime{};
+        std::chrono::microseconds _delayUs{0};
+        std::chrono::microseconds _startTime{0};
+
+        // Pause members
+        TransitionState _stateBeforePause{TransitionState::Pending};
+        std::chrono::microseconds _pauseStartTime{0};
 
         EasingFunction _easingFn;
 
-        TransitionState _state = TransitionState::PENDING;
+        TransitionState _state = TransitionState::Pending;
 
-        float _getNormalizedProgress(std::chrono::microseconds elapsedUs) const;
+        float
+        _calculateLinearProgress(std::chrono::microseconds elapsedUs) const;
 
     protected:
         virtual void _update(float normalizedProgress);
@@ -46,8 +54,10 @@ namespace graphics
 
         UpdateResult update(std::chrono::microseconds elapsedUs);
 
-        void reset();
+        void pause(std::chrono::microseconds elapsedUs);
+        void resume(std::chrono::microseconds elapsedUs);
 
+        void reset();
         bool isDone() const;
     };
 } // namespace graphics

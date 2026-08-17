@@ -94,6 +94,8 @@ int main()
 
     bool animationSet = false;
 
+    auto beforeLoop = std::chrono::steady_clock::now();
+
     while (window.isOpen())
     {
         auto startTime = std::chrono::steady_clock::now();
@@ -155,8 +157,9 @@ int main()
 
             if (!memory.isSelected(idx))
             {
-                transitions[idx]->update(std::chrono::microseconds(
-                    transitionClock.getElapsedTime().asMicroseconds()));
+                const auto res =
+                    transitions[idx]->update(std::chrono::microseconds(
+                        transitionClock.getElapsedTime().asMicroseconds()));
 
                 spriteBackside.setPosition(pos);
                 window.draw(spriteBackside);
@@ -212,6 +215,24 @@ int main()
         auto runtime = std::chrono::duration_cast<std::chrono::microseconds>(
             endTime - startTime);
         float fps = 1'000'000 / static_cast<float>(runtime.count());
+
+        auto fullRunTime = endTime - beforeLoop;
+        if (fullRunTime > 200ms)
+        {
+            for (auto &t : transitions)
+            {
+                t->pause(std::chrono::microseconds(
+                    transitionClock.getElapsedTime().asMicroseconds()));
+            }
+        }
+        if (fullRunTime > 1200ms)
+        {
+            for (auto &t : transitions)
+            {
+                t->resume(std::chrono::microseconds(
+                    transitionClock.getElapsedTime().asMicroseconds()));
+            }
+        }
     }
 
     return 0;
