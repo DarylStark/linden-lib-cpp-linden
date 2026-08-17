@@ -27,6 +27,8 @@ namespace graphics
 
         TransitionState _state = TransitionState::PENDING;
 
+        float _getNormalizedProgress(std::chrono::microseconds elapsedUs) const;
+
     protected:
         virtual void _update(float normalizedProgress);
 
