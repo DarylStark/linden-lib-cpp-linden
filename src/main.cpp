@@ -80,16 +80,16 @@ int main()
 
         // Need to clamp from preventing the alpha from overflowing
         n = std::clamp(n, 0.0f, 1.0f);
-        sprite.setColor({255, 255, 255, static_cast<uint8_t>(255 * n)});
+        // sprite.setColor({255, 255, 255, static_cast<uint8_t>(255 * n)});
     };
 
-    std::vector<graphics::Transition> transitions;
+    auto l = [&spriteBackside, &introTransition](float n)
+    { introTransition(spriteBackside, n); };
+    std::vector<std::unique_ptr<graphics::Transition>> transitions;
     for (size_t idx = 0; idx < frontsideTextures.size() * 2; ++idx)
     {
-        transitions.emplace_back(
-            math::easing::outElastic, 1250ms,
-            [&spriteBackside, &introTransition](float n)
-            { introTransition(spriteBackside, n); }, 50ms * idx);
+        transitions.emplace_back(std::make_unique<graphics::CallbackTransition>(
+            math::easing::outElastic, 1250ms, l, 62ms * idx));
     }
 
     bool animationSet = false;
@@ -112,21 +112,6 @@ int main()
                 lastClick = mouseClick->position;
             }
         }
-
-        // 'tick' all transition
-        // for (auto it = transitions.begin(); it != transitions.end();)
-        // {
-        //     it->update(std::chrono::microseconds(
-        //         transitionClock.getElapsedTime().asMicroseconds()));
-        //     if (it->isDone())
-        //     {
-        //         it = transitions.erase(it);
-        //     }
-        //     else
-        //     {
-        //         ++it;
-        //     }
-        // }
 
         // Clear the window
         window.clear(sf::Color::Black);
@@ -170,7 +155,7 @@ int main()
 
             if (!memory.isSelected(idx))
             {
-                transitions[idx].update(std::chrono::microseconds(
+                transitions[idx]->update(std::chrono::microseconds(
                     transitionClock.getElapsedTime().asMicroseconds()));
 
                 spriteBackside.setPosition(pos);
@@ -201,23 +186,6 @@ int main()
             {
                 textResult.setString("GOOD!");
                 textResult.setFillColor(sf::Color::Green);
-
-                if (!animationSet)
-                {
-                    transitions.emplace_back(
-                        math::easing::smootherStep,
-                        std::chrono::microseconds(500'000),
-                        [&frontsideSprites](float n)
-                        {
-                            for (auto &s : frontsideSprites)
-                            {
-                                s.setColor(
-                                    {255, 255, 255,
-                                     static_cast<uint8_t>(255 - (255 * n))});
-                            }
-                        });
-                    animationSet = true;
-                }
 
                 if (clock.getElapsedTime().asMilliseconds() >= 750)
                 {

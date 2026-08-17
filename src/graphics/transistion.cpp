@@ -4,18 +4,15 @@ namespace graphics
 {
     Transition::Transition(EasingFunction easingFn,
                            std::chrono::microseconds durationUs,
-                           TransitionCallback callback,
                            std::chrono::microseconds delayUs)
-        : _easingFn(std::move(easingFn)), _callback(std::move(callback)),
-          _durationUs(durationUs), _delayUs(delayUs)
+        : _easingFn(std::move(easingFn)), _durationUs(durationUs),
+          _delayUs(delayUs)
     {
     }
 
-    void Transition::_runCallback(float normalizedProgress)
+    void Transition::_update(float normalizedProgress)
     {
-        if (!_callback)
-            return;
-        _callback(_easingFn(normalizedProgress));
+        // Default `_update` doesn't do anything
     }
 
     float Transition::update(std::chrono::microseconds elapsedUs)
@@ -39,7 +36,7 @@ namespace graphics
 
         normalized = std::clamp(normalized, 0.0f, 1.0f);
 
-        _runCallback(normalized);
+        _update(_easingFn(normalized));
 
         if (normalized == 1.0)
         {

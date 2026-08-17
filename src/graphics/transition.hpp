@@ -8,7 +8,6 @@
 namespace graphics
 {
     using EasingFunction = std::function<float(float)>;
-    using TransitionCallback = std::function<void(float)>;
 
     enum class TransitionState
     {
@@ -25,16 +24,15 @@ namespace graphics
         std::chrono::microseconds _startTime{};
 
         EasingFunction _easingFn;
-        TransitionCallback _callback;
 
         TransitionState _state = TransitionState::PENDING;
 
-        void _runCallback(float normalizedProgress);
+    protected:
+        virtual void _update(float normalizedProgress);
 
     public:
         Transition(
             EasingFunction easingFn, std::chrono::microseconds durationUs,
-            TransitionCallback callback = nullptr,
             std::chrono::microseconds delayUs = std::chrono::microseconds(0));
 
         float update(std::chrono::microseconds elapsedUs);
