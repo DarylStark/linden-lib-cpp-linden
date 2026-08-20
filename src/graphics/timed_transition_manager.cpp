@@ -1,13 +1,13 @@
-#include "transition_manager.hpp"
+#include "timed_transition_manager.hpp"
 
 namespace graphics
 {
-    TransitionManager::TransitionManager(Clock &clockSource)
+    TimedTransitionManager::TimedTransitionManager(Clock &clockSource)
         : _clockSource(clockSource)
     {
     }
 
-    void TransitionManager::updateAll(bool autoRemove)
+    void TimedTransitionManager::updateAll(bool autoRemove)
     {
         auto dt = _clockSource.getElapsedTime();
 
@@ -24,7 +24,7 @@ namespace graphics
         }
     }
 
-    void TransitionManager::update(std::size_t index, bool autoRemove)
+    void TimedTransitionManager::update(std::size_t index, bool autoRemove)
     {
         auto dt = _clockSource.getElapsedTime();
 

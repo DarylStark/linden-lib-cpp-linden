@@ -8,7 +8,7 @@
 
 namespace graphics
 {
-    class TransitionManager
+    class TimedTransitionManager
     {
     private:
         Clock &_clockSource;
@@ -16,7 +16,7 @@ namespace graphics
         std::size_t _idx{0};
 
     public:
-        TransitionManager(Clock &clockSource);
+        TimedTransitionManager(Clock &clockSource);
 
         template <typename T, typename... Args>
             requires std::derived_from<T, Transition>
