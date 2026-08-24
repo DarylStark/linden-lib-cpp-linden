@@ -1,6 +1,6 @@
 #pragma once
 
-namespace math
+namespace linden::math
 {
     namespace easing
     {
@@ -25,4 +25,4 @@ namespace math
 
         } // namespace helpers
     } // namespace easing
-} // namespace math
+} // namespace linden::math

@@ -77,7 +77,7 @@ int main()
     sf::Clock transitionClock;
 
     linden::system::StlClockUs stlClock;
-    graphics::TimedTransitionManager tm(stlClock);
+    linden::graphics::TimedTransitionManager tm(stlClock);
 
     const auto introTransition = [&spriteBackside](float n)
     {
@@ -91,15 +91,15 @@ int main()
 
     for (size_t idx = 0; idx < frontsideTextures.size() * 2; ++idx)
     {
-        tm.addTransition<graphics::CallbackTransition>(
-            math::easing::outElastic, 1250ms,
+        tm.addTransition<linden::graphics::CallbackTransition>(
+            linden::math::easing::outElastic, 1250ms,
             [&values, idx](float n) { values[idx] = n; }, 50ms * idx);
     }
 
     sf::Color background = {255, 0, 0};
 
-    tm.addTransition<graphics::CallbackTransition>(
-        math::easing::inOutQuad, 2s,
+    tm.addTransition<linden::graphics::CallbackTransition>(
+        linden::math::easing::inOutQuad, 2s,
         [&background](float n)
         {
             n = std::clamp(n, 0.0f, 1.0f);

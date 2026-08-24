@@ -3,7 +3,7 @@
 #include "transition.hpp"
 #include <chrono>
 
-namespace tweening
+namespace linden::tweening
 {
     using TransitionCallback = std::function<void(float)>;
 
@@ -27,4 +27,4 @@ namespace tweening
         {
         }
     };
-} // namespace tweening
+} // namespace linden::tweening

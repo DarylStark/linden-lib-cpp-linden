@@ -5,7 +5,7 @@
 #include <cstddef>
 #include <numbers>
 
-namespace math
+namespace linden::math
 {
     namespace easing
     {
@@ -74,4 +74,4 @@ namespace math
             return helpers::makeEaseInOut(inCirc, t);
         }
     } // namespace easing
-} // namespace math
+} // namespace linden::math

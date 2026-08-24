@@ -6,7 +6,7 @@
 #include <functional>
 #include <memory>
 
-namespace tweening
+namespace linden::tweening
 {
     using EasingFunction = std::function<float(float)>;
 
@@ -178,4 +178,4 @@ namespace tweening
             return _state == TransitionState::Done;
         }
     };
-} // namespace tweening
+} // namespace linden::tweening

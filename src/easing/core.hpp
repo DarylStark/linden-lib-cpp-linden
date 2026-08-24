@@ -2,7 +2,7 @@
 
 #include "helpers.hpp"
 
-namespace math
+namespace linden::math
 {
     namespace easing
     {
@@ -27,4 +27,4 @@ namespace math
             return t * t * t * (t * (t * 6.0f - 15.0f) + 10.0f);
         }
     } // namespace easing
-} // namespace math
+} // namespace linden::math

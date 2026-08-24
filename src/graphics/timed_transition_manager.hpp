@@ -7,7 +7,7 @@
 #include <map>
 #include <memory>
 
-namespace graphics
+namespace linden::graphics
 {
     template <linden::meta::DurationLike DurationType>
     class TimedTransitionManager
@@ -15,7 +15,7 @@ namespace graphics
     private:
         linden::system::Clock<DurationType> &_clockSource;
         std::map<std::size_t,
-                 std::unique_ptr<tweening::Transition<DurationType>>>
+                 std::unique_ptr<linden::tweening::Transition<DurationType>>>
             _transitions;
         std::size_t _idx{0};
 
@@ -26,7 +26,8 @@ namespace graphics
         }
 
         template <typename T, typename... Args>
-            requires std::derived_from<T, tweening::Transition<DurationType>>
+            requires std::derived_from<
+                T, linden::tweening::Transition<DurationType>>
         std::size_t addTransition(Args &&...args)
         {
             std::size_t id = _idx++;
@@ -43,7 +44,8 @@ namespace graphics
             while (it != _transitions.end())
             {
                 auto res = it->second->update(dt);
-                if (autoRemove && res.state == tweening::TransitionState::Done)
+                if (autoRemove &&
+                    res.state == linden::tweening::TransitionState::Done)
                 {
                     it = _transitions.erase(it);
                     continue;
@@ -60,7 +62,8 @@ namespace graphics
             if (it != _transitions.end())
             {
                 auto res = it->second->update(dt);
-                if (autoRemove && res.state == tweening::TransitionState::Done)
+                if (autoRemove &&
+                    res.state == linden::tweening::TransitionState::Done)
                 {
                     it = _transitions.erase(it);
                 }
@@ -74,4 +77,4 @@ namespace graphics
         TimedTransitionManager<std::chrono::microseconds>;
     using TimedTransitionManagerMs =
         TimedTransitionManager<std::chrono::milliseconds>;
-} // namespace graphics
+} // namespace linden::graphics

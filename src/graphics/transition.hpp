@@ -7,21 +7,24 @@
 #include <functional>
 #include <memory>
 
-namespace graphics
+namespace linden::graphics
 {
     using DefaultTimeUnit = std::chrono::microseconds;
 
-    using TransitionNs = tweening::Transition<std::chrono::nanoseconds>;
-    using TransitionUs = tweening::Transition<std::chrono::microseconds>;
-    using TransitionMs = tweening::Transition<std::chrono::milliseconds>;
+    using TransitionNs = linden::tweening::Transition<std::chrono::nanoseconds>;
+    using TransitionUs =
+        linden::tweening::Transition<std::chrono::microseconds>;
+    using TransitionMs =
+        linden::tweening::Transition<std::chrono::milliseconds>;
 
     using CallbackTransitionNs =
-        tweening::CallbackTransition<std::chrono::nanoseconds>;
+        linden::tweening::CallbackTransition<std::chrono::nanoseconds>;
     using CallbackTransitionUs =
-        tweening::CallbackTransition<std::chrono::microseconds>;
+        linden::tweening::CallbackTransition<std::chrono::microseconds>;
     using CallbackTransitionMs =
-        tweening::CallbackTransition<std::chrono::milliseconds>;
+        linden::tweening::CallbackTransition<std::chrono::milliseconds>;
 
     using Transition = TransitionUs;
-    using CallbackTransition = tweening::CallbackTransition<DefaultTimeUnit>;
-} // namespace graphics
+    using CallbackTransition =
+        linden::tweening::CallbackTransition<DefaultTimeUnit>;
+} // namespace linden::graphics

@@ -3,7 +3,7 @@
 #include "helpers.hpp"
 #include <cstddef>
 
-namespace math
+namespace linden::math
 {
     namespace easing
     {
@@ -209,4 +209,4 @@ namespace math
             }
         };
     } // namespace easing
-} // namespace math
+} // namespace linden::math
