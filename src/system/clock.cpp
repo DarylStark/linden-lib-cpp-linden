@@ -1,6 +1,6 @@
 #include "clock.hpp"
 
-namespace graphics
+namespace linden::system
 {
     StlClock::StlClock()
     {
@@ -38,4 +38,4 @@ namespace graphics
     {
         return _isRunning;
     }
-} // namespace graphics
+} // namespace linden::system

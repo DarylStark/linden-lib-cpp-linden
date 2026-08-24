@@ -2,7 +2,8 @@
 
 namespace graphics
 {
-    TimedTransitionManager::TimedTransitionManager(Clock &clockSource)
+    TimedTransitionManager::TimedTransitionManager(
+        linden::system::Clock &clockSource)
         : _clockSource(clockSource)
     {
     }
@@ -15,7 +16,7 @@ namespace graphics
         while (it != _transitions.end())
         {
             auto res = it->second->update(dt);
-            if (autoRemove && res.state == TransitionState::Done)
+            if (autoRemove && res.state == tweening::TransitionState::Done)
             {
                 it = _transitions.erase(it);
                 continue;
@@ -32,7 +33,7 @@ namespace graphics
         if (it != _transitions.end())
         {
             auto res = it->second->update(dt);
-            if (autoRemove && res.state == TransitionState::Done)
+            if (autoRemove && res.state == tweening::TransitionState::Done)
             {
                 it = _transitions.erase(it);
             }

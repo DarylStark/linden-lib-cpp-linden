@@ -1,6 +1,6 @@
 #pragma once
 
-#include "clock.hpp"
+#include "../system/clock.hpp"
 #include "transition.hpp"
 #include <concepts>
 #include <map>
@@ -11,12 +11,12 @@ namespace graphics
     class TimedTransitionManager
     {
     private:
-        Clock &_clockSource;
+        linden::system::Clock &_clockSource;
         std::map<std::size_t, std::unique_ptr<Transition>> _transitions;
         std::size_t _idx{0};
 
     public:
-        TimedTransitionManager(Clock &clockSource);
+        TimedTransitionManager(linden::system::Clock &clockSource);
 
         template <typename T, typename... Args>
             requires std::derived_from<T, Transition>

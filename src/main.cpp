@@ -1,6 +1,8 @@
 #include "easing.hpp"
 #include "game.hpp"
 #include "graphics.hpp"
+#include "system.hpp"
+#include "tweening.hpp"
 #include <SFML/Graphics.hpp>
 #include <chrono>
 #include <cmath>
@@ -74,7 +76,7 @@ int main()
     sf::Clock clock;
     sf::Clock transitionClock;
 
-    graphics::StlClock stlClock;
+    linden::system::StlClock stlClock;
     graphics::TimedTransitionManager tm(stlClock);
 
     const auto introTransition = [&spriteBackside](float n)

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../tweening/callback_transition.hpp"
+#include "../tweening/transition.hpp"
 #include <chrono>
 #include <cstdint>
 #include <functional>
@@ -7,57 +9,19 @@
 
 namespace graphics
 {
-    using EasingFunction = std::function<float(float)>;
+    using DefaultTimeUnit = std::chrono::microseconds;
 
-    enum class TransitionState
-    {
-        Pending,
-        Delayed,
-        Running,
-        Paused,
-        Done
-    };
+    using TransitionNs = tweening::Transition<std::chrono::nanoseconds>;
+    using TransitionUs = tweening::Transition<std::chrono::microseconds>;
+    using TransitionMs = tweening::Transition<std::chrono::milliseconds>;
 
-    struct UpdateResult
-    {
-        float normalizedProgress;
-        float easedProgress;
-        TransitionState state;
-        bool isFirstFrame;
-    };
+    using CallbackTransitionNs =
+        tweening::CallbackTransition<std::chrono::nanoseconds>;
+    using CallbackTransitionUs =
+        tweening::CallbackTransition<std::chrono::microseconds>;
+    using CallbackTransitionMs =
+        tweening::CallbackTransition<std::chrono::milliseconds>;
 
-    class Transition
-    {
-    private:
-        std::chrono::microseconds _durationUs;
-        std::chrono::microseconds _delayUs{0};
-        std::chrono::microseconds _startTime{0};
-
-        // Pause members
-        TransitionState _stateBeforePause{TransitionState::Pending};
-        std::chrono::microseconds _pauseStartTime{0};
-
-        EasingFunction _easingFn;
-
-        TransitionState _state = TransitionState::Pending;
-
-        float
-        _calculateLinearProgress(std::chrono::microseconds elapsedUs) const;
-
-    protected:
-        virtual void _update(float normalizedProgress);
-
-    public:
-        Transition(
-            EasingFunction easingFn, std::chrono::microseconds durationUs,
-            std::chrono::microseconds delayUs = std::chrono::microseconds(0));
-
-        UpdateResult update(std::chrono::microseconds elapsedUs);
-
-        void pause(std::chrono::microseconds elapsedUs);
-        void resume(std::chrono::microseconds elapsedUs);
-
-        void reset();
-        bool isDone() const;
-    };
+    using Transition = TransitionUs;
+    using CallbackTransition = tweening::CallbackTransition<DefaultTimeUnit>;
 } // namespace graphics

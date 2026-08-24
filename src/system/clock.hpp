@@ -3,7 +3,7 @@
 #include <chrono>
 #include <cstdint>
 
-namespace graphics
+namespace linden::system
 {
     class Clock
     {
@@ -29,5 +29,4 @@ namespace graphics
         void stop();
         bool isRunning() const;
     };
-
-} // namespace graphics
+} // namespace linden::system
