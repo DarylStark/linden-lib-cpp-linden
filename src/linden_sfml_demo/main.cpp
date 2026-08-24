@@ -1,12 +1,9 @@
-#include "easing.hpp"
 #include "game.hpp"
-#include "graphics.hpp"
-#include "system.hpp"
-#include "tweening.hpp"
 #include <SFML/Graphics.hpp>
 #include <chrono>
 #include <cmath>
 #include <iostream>
+#include <linden/linden.hpp>
 #include <memory>
 #include <string>
 #include <vector>
