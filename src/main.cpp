@@ -76,7 +76,7 @@ int main()
     sf::Clock clock;
     sf::Clock transitionClock;
 
-    linden::system::StlClock stlClock;
+    linden::system::StlClockUs stlClock;
     graphics::TimedTransitionManager tm(stlClock);
 
     const auto introTransition = [&spriteBackside](float n)

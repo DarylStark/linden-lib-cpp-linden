@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../meta/concepts.hpp"
 #include <chrono>
 #include <cstdint>
 #include <functional>
@@ -26,14 +27,7 @@ namespace tweening
         bool isFirst;
     };
 
-    template <typename T>
-    concept DurationLike = requires(const T &t) {
-        typename T::rep;
-        typename T::period;
-        { t.count() };
-    };
-
-    template <DurationLike T>
+    template <linden::meta::DurationLike T>
     float toFloat(const T &value)
     {
         return static_cast<float>(value.count());
@@ -175,7 +169,6 @@ namespace tweening
 
         void reset()
         {
-            using namespace std::chrono_literals;
             _startValue = ValueT{};
             _state = TransitionState::Pending;
         }

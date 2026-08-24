@@ -20,12 +20,10 @@ namespace tweening
         }
 
     public:
-        CallbackTransition(
-            EasingFunction easingFn, ValueT durationUs,
-            TransitionCallback callback,
-            std::chrono::microseconds delayUs = std::chrono::microseconds(0))
-            : Transition<ValueT>(easingFn, durationUs, delayUs),
-              _callback(callback)
+        CallbackTransition(EasingFunction easingFn, ValueT duration,
+                           TransitionCallback callback,
+                           ValueT delay = ValueT(0))
+            : Transition<ValueT>(easingFn, duration, delay), _callback(callback)
         {
         }
     };
