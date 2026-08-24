@@ -1,8 +1,8 @@
 {
-    "name": "SFML-TESTS",
+    "name": "linden-lib-cpp-linden",
     "image": "dast1986/slough-dev-dc-cpp:1.0.9",
     "remoteEnv": {
-        "PROMPTNAME": "SFML-TESTS",
+        "PROMPTNAME": "LINDEN",
         "LIBGL_ALWAYS_SOFTWARE": "1"
     },
     "mounts": [

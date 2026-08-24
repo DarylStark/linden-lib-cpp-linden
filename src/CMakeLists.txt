@@ -1,2 +1,4 @@
 add_subdirectory(linden)
-add_subdirectory(linden_sfml_demo)
+if(LINDEN_BUILD_SFML_DEMO)
+    add_subdirectory(linden_sfml_demo)
+endif()
