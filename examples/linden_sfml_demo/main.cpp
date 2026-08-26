@@ -26,8 +26,8 @@ int main()
 
     // Backside of the cards
     sf::Texture textureBackside;
-    if (!textureBackside.loadFromFile(
-            "../../../res/textures/flags/special_skull.png"))
+    if (!textureBackside.loadFromFile("../../../../examples/linden_sfml_demo/"
+                                      "res/textures/flags/special_skull.png"))
     {
         return 1;
     }
@@ -42,16 +42,26 @@ int main()
     // Textures for the front sides
     std::vector<sf::Texture> frontsideTextures;
     frontsideTextures.resize(pairCount);
-    frontsideTextures[0].loadFromFile("../../../res/textures/flags/NL.png");
-    frontsideTextures[1].loadFromFile("../../../res/textures/flags/DE.png");
-    frontsideTextures[2].loadFromFile("../../../res/textures/flags/AU.png");
-    frontsideTextures[3].loadFromFile("../../../res/textures/flags/BE.png");
-    frontsideTextures[4].loadFromFile("../../../res/textures/flags/FR.png");
-    frontsideTextures[5].loadFromFile("../../../res/textures/flags/ES.png");
-    frontsideTextures[6].loadFromFile("../../../res/textures/flags/IT.png");
-    frontsideTextures[7].loadFromFile("../../../res/textures/flags/ZW.png");
-    frontsideTextures[8].loadFromFile("../../../res/textures/flags/MG.png");
-    frontsideTextures[9].loadFromFile("../../../res/textures/flags/DK.png");
+    frontsideTextures[0].loadFromFile(
+        "../../../../examples/linden_sfml_demo/res/textures/flags/NL.png");
+    frontsideTextures[1].loadFromFile(
+        "../../../../examples/linden_sfml_demo/res/textures/flags/DE.png");
+    frontsideTextures[2].loadFromFile(
+        "../../../../examples/linden_sfml_demo/res/textures/flags/AU.png");
+    frontsideTextures[3].loadFromFile(
+        "../../../../examples/linden_sfml_demo/res/textures/flags/BE.png");
+    frontsideTextures[4].loadFromFile(
+        "../../../../examples/linden_sfml_demo/res/textures/flags/FR.png");
+    frontsideTextures[5].loadFromFile(
+        "../../../../examples/linden_sfml_demo/res/textures/flags/ES.png");
+    frontsideTextures[6].loadFromFile(
+        "../../../../examples/linden_sfml_demo/res/textures/flags/IT.png");
+    frontsideTextures[7].loadFromFile(
+        "../../../../examples/linden_sfml_demo/res/textures/flags/ZW.png");
+    frontsideTextures[8].loadFromFile(
+        "../../../../examples/linden_sfml_demo/res/textures/flags/MG.png");
+    frontsideTextures[9].loadFromFile(
+        "../../../../examples/linden_sfml_demo/res/textures/flags/DK.png");
 
     // Sprites for the front sides
     std::vector<sf::Sprite> frontsideSprites;
@@ -62,7 +72,8 @@ int main()
     }
 
     // Text for the score
-    sf::Font fontScore("../../../res/fonts/bitcount.ttf");
+    sf::Font fontScore(
+        "../../../../examples/linden_sfml_demo/res/fonts/bitcount.ttf");
     sf::Text textScore(fontScore, std::to_string(memory.getScore()), 30);
     textScore.setPosition({562 + 128 + 10, 10});
 
