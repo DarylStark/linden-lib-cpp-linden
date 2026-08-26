@@ -6,7 +6,7 @@ target_include_directories(
 		linden
 	INTERFACE
 		$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-		$<INSTALL_INTERFACE:include>
+		$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
 
 target_compile_features(
@@ -28,5 +28,5 @@ install(
 	DIRECTORY
 		${PROJECT_SOURCE_DIR}/include/
 	DESTINATION
-		include
+		${CMAKE_INSTALL_INCLUDEDIR}
 )

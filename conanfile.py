@@ -3,7 +3,7 @@ from conan import ConanFile
 from conan.tools.cmake import cmake_layout, CMakeDeps, CMakeToolchain
 
 
-class SabreAppPilotConan(ConanFile):
+class LindenConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     
     def requirements(self):

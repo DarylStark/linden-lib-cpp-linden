@@ -7,6 +7,8 @@ project(
         CXX
 )
 
+include(GNUInstallDirs)
+
 option(
         LINDEN_BUILD_SFML_DEMO "Build the SFML demo application" OFF
 )
@@ -39,5 +41,11 @@ write_basic_package_version_file(
 install(FILES
     ${CMAKE_CURRENT_BINARY_DIR}/lindenConfig.cmake
     ${CMAKE_CURRENT_BINARY_DIR}/lindenConfigVersion.cmake
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/linden
+)
+
+install(
+    EXPORT lindenTargets
+    NAMESPACE linden::
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/linden
 )
