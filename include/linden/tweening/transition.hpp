@@ -112,7 +112,7 @@ namespace linden::tweening
             {
                 _startValue = elapsedValue;
 
-                if (_skipValue > ValueT::zero())
+                if (_skipValue > ValueT{})
                 {
                     _state = TransitionState::Delayed;
                 }
