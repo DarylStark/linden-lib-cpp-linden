@@ -17,6 +17,7 @@ namespace linden::tweening
         float easedProgress;
         TransitionState state;
         bool isFirst;
+        size_t transitionIndex{};
     };
 
     template <typename ValueT>

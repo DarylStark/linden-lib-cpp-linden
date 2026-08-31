@@ -19,6 +19,7 @@ namespace linden::tweening
         UpdateResult update(ValueT elapsedValue)
         {
             UpdateResult retval = _transitions[_idx]->update(elapsedValue);
+            retval.transitionIndex = _idx;
 
             if (retval.state == TransitionState::Done)
             {
