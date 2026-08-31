@@ -118,6 +118,81 @@ int main()
 
     auto beforeLoop = std::chrono::steady_clock::now();
 
+    sf::CircleShape movementCircle(50.f);
+    movementCircle.setOrigin({50.f, 50.f});
+    movementCircle.setFillColor(sf::Color(0, 255, 0));
+
+    std::unique_ptr<linden::graphics::SequenceTransition> seq =
+        std::make_unique<linden::graphics::SequenceTransition>();
+
+    seq->addTransition<linden::graphics::CallbackTransition>(
+        linden::math::easing::inQuad, 750ms,
+        [&movementCircle](float n)
+        {
+            float x = std::lerp(50.f, 900.f - 100.f, n);
+            movementCircle.setPosition({x, 50.f});
+        });
+
+    seq->addTransition<linden::graphics::CallbackTransition>(
+        linden::math::easing::linear, 500ms,
+        [&movementCircle](float n)
+        {
+            float y = std::lerp(50.f, 650.f - 100.f, n);
+            movementCircle.setPosition({800.f, y});
+        });
+
+    seq->addTransition<linden::graphics::CallbackTransition>(
+        linden::math::easing::linear, 750ms,
+        [&movementCircle](float n)
+        {
+            float x = std::lerp(900.f - 100.f, 50.0f, n);
+            movementCircle.setPosition({x, 550});
+        });
+
+    seq->addTransition<linden::graphics::CallbackTransition>(
+        linden::math::easing::linear, 500ms,
+        [&movementCircle](float n)
+        {
+            float y = std::lerp(650.f - 100.f, 50.f, n);
+            movementCircle.setPosition({50.f, y});
+        });
+
+    seq->addTransition<linden::graphics::CallbackTransition>(
+        linden::math::easing::outQuad, 450ms,
+        [&movementCircle](float n)
+        {
+            float x = std::lerp(50.f, 425.f, n);
+            float y = std::lerp(50.f, 300.f, n);
+            movementCircle.setPosition({x, y});
+        });
+
+    seq->addTransition<linden::graphics::CallbackTransition>(
+        linden::math::easing::inOutElastic, 950ms,
+        [&movementCircle, &background](float n)
+        {
+            float r = std::lerp(50, 425.f, n);
+            movementCircle.setRadius(r);
+            movementCircle.setOrigin({r, r});
+
+            n = std::clamp(n, 0.f, 1.0f);
+            uint8_t red = std::lerp(0, 255, n);
+            uint8_t green = std::lerp(255, 0, n);
+            uint8_t blue = std::lerp(0, 128, n);
+            movementCircle.setFillColor({red, green, blue});
+        });
+
+    seq->addTransition<linden::graphics::CallbackTransition>(
+        linden::math::easing::inOutQuad, 2s,
+        [&background](float n)
+        {
+            n = std::clamp(n, 0.f, 1.0f);
+            background.r = std::lerp(0, 255, n);
+            background.g = std::lerp(0, 0, n);
+            background.b = std::lerp(0, 128, n);
+        });
+
+    tm.addTransition(std::move(seq));
+
     while (window.isOpen())
     {
         auto startTime = std::chrono::steady_clock::now();
@@ -227,6 +302,9 @@ int main()
 
         // Transition practicing
         auto elapsedTime = transitionClock.getElapsedTime().asMicroseconds();
+
+        window.clear(background);
+        window.draw(movementCircle);
 
         // End the current frame
         window.display();
