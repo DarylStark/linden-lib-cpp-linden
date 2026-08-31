@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../tweening/callback_transition.hpp"
+#include "../tweening/sequence_transition.hpp"
 #include "../tweening/transition.hpp"
 #include <chrono>
 #include <cstdint>
@@ -25,6 +26,9 @@ namespace linden::graphics
         linden::tweening::CallbackTransition<std::chrono::milliseconds>;
 
     using Transition = TransitionUs;
+    using BaseTransition = linden::tweening::BaseTransition<DefaultTimeUnit>;
     using CallbackTransition =
         linden::tweening::CallbackTransition<DefaultTimeUnit>;
+    using SequenceTransition =
+        linden::tweening::SequenceTransition<DefaultTimeUnit>;
 } // namespace linden::graphics

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../meta/concepts.hpp"
+#include "base_transition.hpp"
 #include <chrono>
 #include <cstdint>
 #include <functional>
@@ -9,23 +10,6 @@
 namespace linden::tweening
 {
     using EasingFunction = std::function<float(float)>;
-
-    enum class TransitionState
-    {
-        Pending,
-        Delayed,
-        Running,
-        Paused,
-        Done
-    };
-
-    struct UpdateResult
-    {
-        float normalizedProgress;
-        float easedProgress;
-        TransitionState state;
-        bool isFirst;
-    };
 
     template <linden::meta::DurationLike T>
     float toFloat(const T &value)
@@ -40,7 +24,7 @@ namespace linden::tweening
     }
 
     template <typename ValueT>
-    class Transition
+    class Transition : public BaseTransition<ValueT>
     {
     private:
         ValueT _maxValue;
@@ -93,7 +77,7 @@ namespace linden::tweening
         {
         }
 
-        UpdateResult update(ValueT elapsedValue)
+        virtual UpdateResult update(ValueT elapsedValue) override
         {
             bool isFirst = false;
 

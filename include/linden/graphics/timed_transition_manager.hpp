@@ -2,7 +2,7 @@
 
 #include "../meta/concepts.hpp"
 #include "../system/clock.hpp"
-#include "transition.hpp"
+#include "../tweening/base_transition.hpp"
 #include <concepts>
 #include <map>
 #include <memory>
@@ -14,8 +14,9 @@ namespace linden::graphics
     {
     private:
         linden::system::Clock<DurationType> &_clockSource;
-        std::map<std::size_t,
-                 std::unique_ptr<linden::tweening::Transition<DurationType>>>
+        std::map<
+            std::size_t,
+            std::unique_ptr<linden::tweening::BaseTransition<DurationType>>>
             _transitions;
         std::size_t _idx{0};
 
@@ -27,12 +28,21 @@ namespace linden::graphics
 
         template <typename T, typename... Args>
             requires std::derived_from<
-                T, linden::tweening::Transition<DurationType>>
+                T, linden::tweening::BaseTransition<DurationType>>
         std::size_t addTransition(Args &&...args)
         {
             std::size_t id = _idx++;
             _transitions.try_emplace(
                 id, std::make_unique<T>(std::forward<Args>(args)...));
+            return id;
+        }
+
+        std::size_t addTransition(
+            std::unique_ptr<linden::tweening::BaseTransition<DurationType>>
+                &&transition)
+        {
+            std::size_t id = _idx++;
+            _transitions[id] = std::move(transition);
             return id;
         }
 
